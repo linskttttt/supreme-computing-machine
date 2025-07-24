@@ -1096,142 +1096,102 @@ function Library:Create(options)
 	do
 		-- StarterGui.Vision Lib v2.StartAnimationFrame
 		StartAnimation["91"] = Instance.new("Frame", LibFrame["1"])
-		StartAnimation["91"]["BorderSizePixel"] = 0
-		StartAnimation["91"]["AutoLocalize"] = false
-		StartAnimation["91"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255)
-		StartAnimation["91"]["AnchorPoint"] = Vector2.new(0.5, 0.5)
-		StartAnimation["91"]["BackgroundTransparency"] = 1
-		StartAnimation["91"]["Size"] = UDim2.new(0, 498, 0, 498)
-		StartAnimation["91"]["ClipsDescendants"] = true
-		StartAnimation["91"]["BorderColor3"] = Color3.fromRGB(28, 43, 54)
-		StartAnimation["91"]["Position"] = UDim2.new(0.5, 0, 0.5, 0)
-		StartAnimation["91"]["Name"] = [[StartAnimationFrame]]
+		local animFrame = StartAnimation["91"]
+		animFrame.Name = "StartAnimationFrame"
+		animFrame.BorderSizePixel = 0
+		animFrame.AutoLocalize = false
+		animFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		animFrame.BackgroundTransparency = 1
+		animFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+		animFrame.Size = UDim2.new(0, 498, 0, 498)
+		animFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+		animFrame.ClipsDescendants = true
 
-		-- StarterGui.Vision Lib v2.StartAnimationFrame.Main
-		StartAnimation["92"] = Instance.new("Frame", StartAnimation["91"])
-		StartAnimation["92"]["ZIndex"] = 2
-		StartAnimation["92"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255)
-		StartAnimation["92"]["Size"] = UDim2.new(0, 310, 0, 0)
-		StartAnimation["92"]["Position"] = UDim2.new(0.186, 0, 0.167, 0)
-		StartAnimation["92"]["Name"] = [[Main]]
-		StartAnimation["92"]["ClipsDescendants"] = true
-		StartAnimation["92"]["BorderSizePixel"] = 0
+		-- 1) Logo at top‑center
+		local logo = Instance.new("ImageLabel", animFrame)
+		logo.Name = "Logo"
+		logo.BackgroundTransparency = 1
+		logo.Image = "rbxassetid://1234567890" -- ← your decal ID
+		logo.Size = UDim2.new(0, 150, 0, 150)
+		logo.AnchorPoint = Vector2.new(0.5, 0)
+		logo.Position = UDim2.new(0.5, 0, 0.1, 0)
+		Instance.new("UICorner", logo).CornerRadius = UDim.new(0, 16)
 
-		-- StarterGui.Vision Lib v2.StartAnimationFrame.Main.UIGradient
-		StartAnimation["93"] = Instance.new("UIGradient", StartAnimation["92"])
-		StartAnimation["93"]["Rotation"] = 90
-		StartAnimation["93"]["Color"] = ThemeColor.Main
+		-- 2) Main Title
+		local title = Instance.new("TextLabel", animFrame)
+		title.Name = "MainTitle"
+		title.Text = options.Name or "All Services | HUB"
+		title.Font = Enum.Font.GothamBold
+		title.TextSize = 24
+		title.TextColor3 = Color3.fromRGB(255, 255, 255)
+		title.BackgroundTransparency = 1
+		title.Size = UDim2.new(1, 0, 0, 30)
+		title.AnchorPoint = Vector2.new(0.5, 0)
+		title.Position = UDim2.new(0.5, 0, 0.35, 0)
 
-		ThemeInstances["Main"][#ThemeInstances["Main"] + 1] = StartAnimation["93"]
+		-- 3) Subtitle / Footer
+		local subtitle = Instance.new("TextLabel", animFrame)
+		subtitle.Name = "SubTitle"
+		subtitle.Text = options.Footer or "Loading your experience..."
+		subtitle.Font = Enum.Font.Gotham
+		subtitle.TextSize = 18
+		subtitle.TextColor3 = Color3.fromRGB(200, 200, 200)
+		subtitle.BackgroundTransparency = 1
+		subtitle.Size = UDim2.new(1, 0, 0, 24)
+		subtitle.AnchorPoint = Vector2.new(0.5, 0)
+		subtitle.Position = UDim2.new(0.5, 0, 0.42, 0)
 
-		-- StarterGui.Vision Lib v2.StartAnimationFrame.Main.UICorner
-		StartAnimation["94"] = Instance.new("UICorner", StartAnimation["92"])
-		StartAnimation["94"]["CornerRadius"] = UDim.new(0, 4)
+		-- 4) Loading bar background
+		local loadBack = Instance.new("Frame", animFrame)
+		loadBack.Name = "LoadBack"
+		loadBack.Size = UDim2.new(0.6, 0, 0, 8)
+		loadBack.AnchorPoint = Vector2.new(0.5, 0)
+		loadBack.Position = UDim2.new(0.5, 0, 0.5, 0)
+		loadBack.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+		loadBack.ClipsDescendants = true
+		Instance.new("UICorner", loadBack).CornerRadius = UDim.new(0, 4)
 
-		-- StarterGui.Vision Lib v2.StartAnimationFrame.Main.Title
-		StartAnimation["95"] = Instance.new("TextLabel", StartAnimation["92"])
-		StartAnimation["95"]["ZIndex"] = 2
-		StartAnimation["95"]["BorderSizePixel"] = 0
-		StartAnimation["95"]["TextXAlignment"] = Enum.TextXAlignment.Left
-		StartAnimation["95"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255)
-		StartAnimation["95"]["TextSize"] = 20
-		StartAnimation["95"]["TextColor3"] = ThemeColor.Text
+		-- 5) Loading bar fill
+		local loadFront = Instance.new("Frame", loadBack)
+		loadFront.Name = "LoadFront"
+		loadFront.Size = UDim2.new(0, 0, 1, 0)
+		loadFront.Position = UDim2.new(0, 0, 0, 0)
+		loadFront.BackgroundColor3 = Color3.fromRGB(255, 80, 80)
+		Instance.new("UICorner", loadFront).CornerRadius = UDim.new(0, 4)
+		Library:Tween(loadFront, {
+			Length = 1.2,
+			Style = Enum.EasingStyle.Sine,
+			Direction = Enum.EasingDirection.Out,
+			Goal = { Size = UDim2.new(1, 0, 1, 0) },
+		})
 
-		ThemeInstances["Text"][#ThemeInstances["Text"] + 1] = StartAnimation["95"]
-		StartAnimation["95"]["Size"] = UDim2.new(0, 255, 0, 32)
-		StartAnimation["95"]["Text"] = options.Name
-		StartAnimation["95"]["Name"] = [[Title]]
-		StartAnimation["95"]["Font"] = Enum.Font.GothamMedium
-		StartAnimation["95"]["BackgroundTransparency"] = 1
-		StartAnimation["95"]["Position"] = UDim2.new(0, 10, 0, 5)
+		-- 6) Player info bottom‑left
+		local playerInfo = Instance.new("Frame", animFrame)
+		playerInfo.Name = "PlayerInfo"
+		playerInfo.Size = UDim2.new(0.25, 0, 0.12, 0)
+		playerInfo.Position = UDim2.new(0, 10, 1, -((0.12 * animFrame.AbsoluteSize.Y) + 10))
+		playerInfo.BackgroundTransparency = 1
 
-		-- StarterGui.Vision Lib v2.StartAnimationFrame.Main.Title
-		StartAnimation["96"] = Instance.new("TextLabel", StartAnimation["92"])
-		StartAnimation["96"]["ZIndex"] = 2
-		StartAnimation["96"]["BorderSizePixel"] = 0
-		StartAnimation["96"]["TextXAlignment"] = Enum.TextXAlignment.Left
-		StartAnimation["96"]["TextYAlignment"] = Enum.TextYAlignment.Top
-		StartAnimation["96"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255)
-		StartAnimation["96"]["TextSize"] = 11
-		StartAnimation["96"]["TextColor3"] = ThemeColor.Text
-
-		ThemeInstances["Text"][#ThemeInstances["Text"] + 1] = StartAnimation["96"]
-		StartAnimation["96"]["Size"] = UDim2.new(0, 255, 0, 18)
-		StartAnimation["96"]["Text"] = options.Footer
-		StartAnimation["96"]["Name"] = [[Title]]
-		StartAnimation["96"]["Font"] = Enum.Font.Gotham
-		StartAnimation["96"]["BackgroundTransparency"] = 1
-		StartAnimation["96"]["Position"] = UDim2.new(0, 12, 0, 32)
-
-		-- StarterGui.Vision Lib v2.StartAnimationFrame.Main.LoadBack
-		StartAnimation["97"] = Instance.new("Frame", StartAnimation["92"])
-		StartAnimation["97"]["ZIndex"] = 2
-		StartAnimation["97"]["BackgroundColor3"] = ThemeColor.Textbox
-
-		ThemeInstances["Text"][#ThemeInstances["Text"] + 1] = StartAnimation["97"]
-
-		StartAnimation["97"]["Size"] = UDim2.new(0, 285, 0, 6)
-		StartAnimation["97"]["Position"] = UDim2.new(0.03870967775583267, 0, 0.942219614982605, 0)
-		StartAnimation["97"]["Name"] = [[LoadBack]]
-
-		-- StarterGui.Vision Lib v2.StartAnimationFrame.Main.LoadBack.UICorner
-		StartAnimation["98"] = Instance.new("UICorner", StartAnimation["97"])
-		StartAnimation["98"]["CornerRadius"] = UDim.new(0, 7)
-
-		-- StarterGui.Vision Lib v2.StartAnimationFrame.Main.LoadBack.LoadFront
-		StartAnimation["99"] = Instance.new("Frame", StartAnimation["97"])
-		StartAnimation["99"]["ZIndex"] = 2
-		StartAnimation["99"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255)
-		StartAnimation["99"]["Size"] = UDim2.new(0.035087719559669495, 0, 1, 0)
-		StartAnimation["99"]["Position"] = UDim2.new(-0.007017544005066156, 0, 0, 0)
-		StartAnimation["99"]["Name"] = [[LoadFront]]
-
-		-- StarterGui.Vision Lib v2.StartAnimationFrame.Main.LoadBack.LoadFront.UICorner
-		StartAnimation["9a"] = Instance.new("UICorner", StartAnimation["99"])
-		StartAnimation["9a"]["CornerRadius"] = UDim.new(0, 7)
-
-		-- StarterGui.Vision Lib v2.StartAnimationFrame.Main.LoadBack.LoadFront.UIGradient
-		StartAnimation["9b"] = Instance.new("UIGradient", StartAnimation["99"])
-		StartAnimation["9b"]["Color"] = ThemeColor.Tertiary
-
-		ThemeInstances["Tertiary"][#ThemeInstances["Tertiary"] + 1] = StartAnimation["9b"]
-
-		-- StarterGui.Vision Lib v2.StartAnimationFrame.Main.CharAva
-		StartAnimation["9c"] = Instance.new("ImageLabel", StartAnimation["92"])
-		StartAnimation["9c"]["ZIndex"] = 2
-		StartAnimation["9c"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255)
-		StartAnimation["9c"]["Image"] = Players:GetUserThumbnailAsync(
-			LocalPlayer.UserId,
-			Enum.ThumbnailType.HeadShot,
-			Enum.ThumbnailSize.Size100x100
+		local avatar = Instance.new("ImageLabel", playerInfo)
+		avatar.Name = "Avatar"
+		avatar.Size = UDim2.new(0, 40, 0, 40)
+		avatar.Position = UDim2.new(0, 0, 0, 0)
+		avatar.BackgroundTransparency = 1
+		avatar.Image = Players:GetUserThumbnailAsync(
+			Players.LocalPlayer.UserId,
+			Enum.ThumbnailType.AvatarBust,
+			Enum.ThumbnailSize.Size48x48
 		)
-		StartAnimation["9c"]["Size"] = UDim2.new(0, 70, 0, 70)
-		StartAnimation["9c"]["Name"] = [[CharAva]]
-		StartAnimation["9c"]["Position"] = UDim2.new(0, 12, 0, 49)
-		StartAnimation["9c"]["BackgroundTransparency"] = 1
-		StartAnimation["9c"]["ImageTransparency"] = 1
 
-		-- StarterGui.Vision Lib v2.StartAnimationFrame.Main.CharAva.UICorner
-		StartAnimation["9d"] = Instance.new("UICorner", StartAnimation["9c"])
-		StartAnimation["9d"]["CornerRadius"] = UDim.new(1, 8)
-
-		-- StarterGui.Vision Lib v2.StartAnimationFrame.Main.WelcomeText
-		StartAnimation["9e"] = Instance.new("TextLabel", StartAnimation["92"])
-		StartAnimation["9e"]["TextWrapped"] = true
-		StartAnimation["9e"]["ZIndex"] = 2
-		StartAnimation["9e"]["TextXAlignment"] = Enum.TextXAlignment.Left
-		StartAnimation["9e"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255)
-		StartAnimation["9e"]["TextSize"] = 19
-		StartAnimation["9e"]["TextTransparency"] = 1
-		StartAnimation["9e"]["TextColor3"] = ThemeColor.Text
-
-		ThemeInstances["Text"][#ThemeInstances["Text"] + 1] = StartAnimation["9e"]
-		StartAnimation["9e"]["Size"] = UDim2.new(0, 282, 0, 70)
-		StartAnimation["9e"]["Text"] = [[Welcome, ]] .. Players.LocalPlayer.Name
-		StartAnimation["9e"]["Name"] = [[WelcomeText]]
-		StartAnimation["9e"]["Font"] = Enum.Font.GothamMedium
-		StartAnimation["9e"]["BackgroundTransparency"] = 1
-		StartAnimation["9e"]["Position"] = UDim2.new(0, 98, 0, 49)
+		local nameLabel = Instance.new("TextLabel", playerInfo)
+		nameLabel.Name = "NameLabel"
+		nameLabel.Size = UDim2.new(1, -50, 1, 0)
+		nameLabel.Position = UDim2.new(0, 50, 0, 0)
+		nameLabel.BackgroundTransparency = 1
+		nameLabel.Text = Players.LocalPlayer.Name
+		nameLabel.Font = Enum.Font.Gotham
+		nameLabel.TextSize = 18
+		nameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 	end
 
 	local KeySystem = {}

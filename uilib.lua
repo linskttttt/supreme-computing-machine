@@ -1256,92 +1256,78 @@ do
         if options.KeySystem then
             KeySystem = { CorrectKey = false, Attempts = Gui.MaxAttempts }
 
-            -- Hide avatar & welcome while entering key
+            -- Hide main avatar & welcome while entering key
             StartAnimation["9c"].Visible = false
             StartAnimation["9e"].Visible = false
 
-            -- Container for all KeySystem UI
+            -- KeySystem container (bigger, with padding)
             local keyContainer = Instance.new("Frame", StartAnimation["92"])
-            keyContainer.Name               = "KeySystemContainer"
-            keyContainer.Size               = UDim2.new(1, -40, 0, 160)
-            keyContainer.Position           = UDim2.new(0, 20, 0.5, -80)
+            keyContainer.Name                   = "KeySystemContainer"
+            keyContainer.Size                   = UDim2.new(1, -32, 0, 220)
+            keyContainer.Position               = UDim2.new(0, 16, 1, 0)       -- start off-screen
             keyContainer.BackgroundTransparency = 1
 
-            local padding = Instance.new("UIPadding", keyContainer)
-            padding.PaddingTop    = UDim.new(0, 12)
-            padding.PaddingBottom = UDim.new(0, 12)
-            padding.PaddingLeft   = UDim.new(0, 12)
-            padding.PaddingRight  = UDim.new(0, 12)
+            -- Slide in the container
+            Library:Tween(keyContainer, {
+                Length    = 0.6,
+                Direction = Enum.EasingDirection.Out,
+                Goal      = { Position = UDim2.new(0, 16, 0.5, -110) }, 
+            })
 
-            local layout = Instance.new("UIListLayout", keyContainer)
-            layout.FillDirection       = Enum.FillDirection.Vertical
-            layout.SortOrder           = Enum.SortOrder.LayoutOrder
-            layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-            layout.Padding             = UDim.new(0, 8)
-
-            -- Title
-            local keyTitle = Instance.new("TextLabel", keyContainer)
-            keyTitle.Name               = "KeySystemTitle"
-            keyTitle.LayoutOrder        = 1
-            keyTitle.Size               = UDim2.new(1, 0, 0, 24)
-            keyTitle.BackgroundTransparency = 1
-            keyTitle.Font               = Enum.Font.GothamBold
-            keyTitle.TextSize           = 18
-            keyTitle.TextColor3         = ThemeColor.Text
-            keyTitle.Text               = "Key System"
-            keyTitle.TextXAlignment     = Enum.TextXAlignment.Center
+            -- Avatar at the top-center of the key prompt
+            local avatar = Instance.new("ImageLabel", keyContainer)
+            avatar.Name                   = "UserAvatar"
+            avatar.Size                   = UDim2.new(0, 80, 0, 80)
+            avatar.AnchorPoint            = Vector2.new(0.5, 0)
+            avatar.Position               = UDim2.new(0.5, 0, 0, 0)
+            avatar.BackgroundTransparency = 1
+            avatar.Image = Players:GetUserThumbnailAsync(
+                LocalPlayer.UserId,
+                Enum.ThumbnailType.HeadShot,
+                Enum.ThumbnailSize.Size100x100
+            )
+            local avCorn = Instance.new("UICorner", avatar)
+            avCorn.CornerRadius = UDim.new(1, 0)
 
             -- Input frame + TextBox
             local inputFrame = Instance.new("Frame", keyContainer)
-            inputFrame.Name               = "InputFrame"
-            inputFrame.LayoutOrder        = 2
-            inputFrame.Size               = UDim2.new(1, 0, 0, 36)
-            inputFrame.BackgroundColor3   = ThemeColor.Textbox
-            inputFrame.BorderSizePixel    = 0
+            inputFrame.Name                 = "InputFrame"
+            inputFrame.Size                 = UDim2.new(1, 0, 0, 36)
+            inputFrame.Position             = UDim2.new(0, 0, 0, 80 + 16)
+            inputFrame.BackgroundColor3     = ThemeColor.Textbox
+            inputFrame.BorderSizePixel      = 0
             local iCorn = Instance.new("UICorner", inputFrame)
-            iCorn.CornerRadius             = UDim.new(0, 6)
+            iCorn.CornerRadius = UDim.new(0, 6)
             local stroke = Instance.new("UIStroke", inputFrame)
-            stroke.Color                   = ThemeColor.MainTrue
-            stroke.Thickness               = 2
+            stroke.Color       = ThemeColor.MainTrue
+            stroke.Thickness   = 2
 
             local keyBox = Instance.new("TextBox", inputFrame)
-            keyBox.Name                     = "KeyTextBox"
-            keyBox.Size                     = UDim2.new(1, -14, 1, -14)
-            keyBox.Position                 = UDim2.new(0, 7, 0, 7)
-            keyBox.BackgroundTransparency   = 1
-            keyBox.PlaceholderText          = "Enter key..."
-            keyBox.PlaceholderColor3        = ThemeColor.PlaceholderText
-            keyBox.Text                     = ""
-            keyBox.TextColor3               = ThemeColor.Text
-            keyBox.Font                     = Enum.Font.Gotham
-            keyBox.TextSize                 = 14
-            keyBox.TextXAlignment           = Enum.TextXAlignment.Left
+            keyBox.Name                   = "KeyTextBox"
+            keyBox.Size                   = UDim2.new(1, -14, 1, -14)
+            keyBox.Position               = UDim2.new(0, 7, 0, 7)
+            keyBox.BackgroundTransparency = 1
+            keyBox.PlaceholderText        = "Enter key..."
+            keyBox.PlaceholderColor3      = ThemeColor.PlaceholderText
+            keyBox.Text                   = ""
+            keyBox.TextColor3             = ThemeColor.Text
+            keyBox.Font                   = Enum.Font.Gotham
+            keyBox.TextSize               = 14
+            keyBox.TextXAlignment         = Enum.TextXAlignment.Left
 
-            -- Note label
-            local note = Instance.new("TextLabel", keyContainer)
-            note.Name                       = "KeySystemNote"
-            note.LayoutOrder                = 3
-            note.Size                       = UDim2.new(1, 0, 0, 20)
-            note.BackgroundTransparency     = 1
-            note.Font                       = Enum.Font.Gotham
-            note.TextSize                   = 12
-            note.TextColor3                 = ThemeColor.PlaceholderText
-            note.Text                       = "Join our Discord to get the key!"
-            note.TextWrapped                = true
-            note.TextXAlignment             = Enum.TextXAlignment.Center
-
-            -- Discord button
+            -- Discord invite button
             local discordBtn = Instance.new("TextButton", keyContainer)
-            discordBtn.Name                 = "CopyDiscordButton"
-            discordBtn.LayoutOrder          = 4
-            discordBtn.Size                 = UDim2.new(0.6, 0, 0, 32)
-            discordBtn.BackgroundColor3     = ThemeColor.MainTrue
-            discordBtn.Font                 = Enum.Font.GothamBold
-            discordBtn.TextSize             = 14
-            discordBtn.TextColor3           = Color3.new(1, 1, 1)
-            discordBtn.Text                 = "Copy Discord Invite"
+            discordBtn.Name               = "CopyDiscordButton"
+            discordBtn.Size               = UDim2.new(0.6, 0, 0, 36)
+            discordBtn.AnchorPoint        = Vector2.new(0.5, 0)
+            discordBtn.Position           = UDim2.new(0.5, 0, 0, 80 + 16 + 36 + 16)
+            discordBtn.BackgroundColor3   = ThemeColor.MainTrue
+            discordBtn.Font               = Enum.Font.GothamBold
+            discordBtn.TextSize           = 14
+            discordBtn.TextColor3         = Color3.new(1, 1, 1)
+            discordBtn.Text               = "Copy Discord Invite"
             local bCorn = Instance.new("UICorner", discordBtn)
-            bCorn.CornerRadius               = UDim.new(0, 6)
+            bCorn.CornerRadius = UDim.new(0, 6)
 
             discordBtn.MouseEnter:Connect(function()
                 stroke.Color = ThemeColor.SecondaryTrue
@@ -1359,6 +1345,18 @@ do
                     Duration = 3,
                 })
             end)
+
+            -- Footer title at bottom-left
+            local footer = Instance.new("TextLabel", keyContainer)
+            footer.Name                   = "KeySystemFooter"
+            footer.Size                   = UDim2.new(0, 100, 0, 24)
+            footer.AnchorPoint            = Vector2.new(0, 1)
+            footer.Position               = UDim2.new(0, 16, 1, -16)
+            footer.BackgroundTransparency = 1
+            footer.Font                   = Enum.Font.GothamBold
+            footer.TextSize               = 14
+            footer.TextColor3             = ThemeColor.Text
+            footer.Text                   = "Key System"
 
             -- Handle key submission
             keyBox.FocusLost:Connect(function()
@@ -1388,18 +1386,19 @@ do
                 end
             end)
 
-            -- Wait for correct key
+            -- Wait until the correct key is entered
             repeat task.wait() until KeySystem.CorrectKey
 
-            -- Slide the key prompt away
-            keyContainer:TweenPosition(
-                UDim2.new(0, 20, 1, 0),
-                "Out", "Quad", 0.4, true
-            )
+            -- Slide out & destroy
+            Library:Tween(keyContainer, {
+                Length    = 0.4,
+                Direction = Enum.EasingDirection.In,
+                Goal      = { Position = UDim2.new(0, 16, 1, 0) },
+            })
             task.wait(0.5)
             keyContainer:Destroy()
 
-            -- Show avatar & welcome again
+            -- Restore main avatar & welcome
             StartAnimation["9c"].Visible = true
             StartAnimation["9e"].Visible = true
 
@@ -1408,11 +1407,14 @@ do
             KeyChecked = true
         end
 
-        -- Wait until key step is done
-        repeat task.wait() until KeyChecked
+        -- Wait for KeySystem step to finish
+        repeat
+            task.wait()
+        until KeyChecked
+
         task.wait(0.3)
 
-        -- 4) Finish the slide-in and reveal main UI
+        -- 4) Final reveal of the main UI
         Library:Tween(StartAnimation["92"], {
             Length = 1,
             Goal   = { Position = UDim2.new(0, 0, 0, 0) },
@@ -1455,6 +1457,7 @@ do
 
         Gui["3"].Position = UDim2.new(0, 0, 0, 300)
         Gui["2"].Size     = UDim2.new(0, 498, 0, 498)
+
         Library:Tween(Gui["3"], {
             Length = 1.5,
             Goal   = { Position = UDim2.new(0, 0, 0, 455) },
@@ -1475,6 +1478,7 @@ do
         end)
     end)
 end
+
 
 
 	function Gui:Tab(options)

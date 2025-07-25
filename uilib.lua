@@ -1094,392 +1094,392 @@ function Library:Create(options)
 	)
 
 	do
-    -- StarterGui.Vision Lib v2.StartAnimationFrame
-    StartAnimation["91"] = Instance.new("Frame", LibFrame["1"])
-    StartAnimation["91"].Name                   = "StartAnimationFrame"
-    StartAnimation["91"].AnchorPoint            = Vector2.new(0.5, 0.5)
-    StartAnimation["91"].Position               = UDim2.new(0.5, 0, 0.5, 0)
-    StartAnimation["91"].Size                   = UDim2.new(0, 498, 0, 498)
-    StartAnimation["91"].BackgroundColor3       = Color3.fromRGB(255, 255, 255)
-    StartAnimation["91"].BackgroundTransparency = 1
-    StartAnimation["91"].BorderSizePixel        = 0
-    StartAnimation["91"].BorderColor3           = Color3.fromRGB(28, 43, 54)
-    StartAnimation["91"].ClipsDescendants       = true
+		-- StarterGui.Vision Lib v2.StartAnimationFrame
+		StartAnimation["91"] = Instance.new("Frame", LibFrame["1"])
+		StartAnimation["91"].Name = "StartAnimationFrame"
+		StartAnimation["91"].AnchorPoint = Vector2.new(0.5, 0.5)
+		StartAnimation["91"].Position = UDim2.new(0.5, 0, 0.5, 0)
+		StartAnimation["91"].Size = UDim2.new(0, 498, 0, 498)
+		StartAnimation["91"].BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		StartAnimation["91"].BackgroundTransparency = 1
+		StartAnimation["91"].BorderSizePixel = 0
+		StartAnimation["91"].BorderColor3 = Color3.fromRGB(28, 43, 54)
+		StartAnimation["91"].ClipsDescendants = true
 
-    -- StarterGui.Vision Lib v2.StartAnimationFrame.Main
-    StartAnimation["92"] = Instance.new("Frame", StartAnimation["91"])
-    StartAnimation["92"].Name                   = "Main"
-    StartAnimation["92"].ZIndex                 = 2
-    StartAnimation["92"].Position               = UDim2.new(0.186, 0, 0.167, 0)
-    StartAnimation["92"].Size                   = UDim2.new(0, 310, 0, 0)
-    StartAnimation["92"].BackgroundColor3       = Color3.fromRGB(255, 255, 255)
-    StartAnimation["92"].BorderSizePixel        = 0
-    StartAnimation["92"].ClipsDescendants       = true
+		-- StarterGui.Vision Lib v2.StartAnimationFrame.Main
+		StartAnimation["92"] = Instance.new("Frame", StartAnimation["91"])
+		StartAnimation["92"].Name = "Main"
+		StartAnimation["92"].ZIndex = 2
+		StartAnimation["92"].Position = UDim2.new(0.186, 0, 0.167, 0)
+		StartAnimation["92"].Size = UDim2.new(0, 310, 0, 0)
+		StartAnimation["92"].BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		StartAnimation["92"].BorderSizePixel = 0
+		StartAnimation["92"].ClipsDescendants = true
 
-    -- Gradient & Corner for Main
-    StartAnimation["93"] = Instance.new("UIGradient", StartAnimation["92"])
-    StartAnimation["93"].Rotation               = 90
-    StartAnimation["93"].Color                  = ThemeColor.Main
-    ThemeInstances["Main"][#ThemeInstances["Main"] + 1] = StartAnimation["93"]
+		-- Gradient & Corner for Main
+		StartAnimation["93"] = Instance.new("UIGradient", StartAnimation["92"])
+		StartAnimation["93"].Rotation = 90
+		StartAnimation["93"].Color = ThemeColor.Main
+		ThemeInstances["Main"][#ThemeInstances["Main"] + 1] = StartAnimation["93"]
 
-    StartAnimation["94"] = Instance.new("UICorner", StartAnimation["92"])
-    StartAnimation["94"].CornerRadius            = UDim.new(0, 4)
+		StartAnimation["94"] = Instance.new("UICorner", StartAnimation["92"])
+		StartAnimation["94"].CornerRadius = UDim.new(0, 4)
 
-    -- Auto‐layout for header + loader
-    local mainLayout = Instance.new("UIListLayout", StartAnimation["92"])
-    mainLayout.SortOrder            = Enum.SortOrder.LayoutOrder
-    mainLayout.FillDirection        = Enum.FillDirection.Vertical
-    mainLayout.HorizontalAlignment  = Enum.HorizontalAlignment.Center
-    mainLayout.VerticalAlignment    = Enum.VerticalAlignment.Center
-    mainLayout.Padding              = UDim.new(0, 10)
+		-- Auto‐layout for header + loader
+		local mainLayout = Instance.new("UIListLayout", StartAnimation["92"])
+		mainLayout.SortOrder = Enum.SortOrder.LayoutOrder
+		mainLayout.FillDirection = Enum.FillDirection.Vertical
+		mainLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+		mainLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+		mainLayout.Padding = UDim.new(0, 10)
 
-    -- Title (header)
-    StartAnimation["95"] = Instance.new("TextLabel", StartAnimation["92"])
-    StartAnimation["95"].Name                   = "Title"
-    StartAnimation["95"].LayoutOrder            = 1
-    StartAnimation["95"].BackgroundTransparency = 1
-    StartAnimation["95"].BorderSizePixel        = 0
-    StartAnimation["95"].Text                   = options.Name
-    StartAnimation["95"].Font                   = Enum.Font.GothamMedium
-    StartAnimation["95"].TextSize               = 20
-    StartAnimation["95"].TextColor3             = ThemeColor.Text
-    StartAnimation["95"].TextXAlignment         = Enum.TextXAlignment.Center
-    StartAnimation["95"].Size                   = UDim2.new(1, -20, 0, 32)
-    ThemeInstances["Text"][#ThemeInstances["Text"] + 1] = StartAnimation["95"]
+		-- Title (header)
+		StartAnimation["95"] = Instance.new("TextLabel", StartAnimation["92"])
+		StartAnimation["95"].Name = "Title"
+		StartAnimation["95"].LayoutOrder = 1
+		StartAnimation["95"].BackgroundTransparency = 1
+		StartAnimation["95"].BorderSizePixel = 0
+		StartAnimation["95"].Text = options.Name
+		StartAnimation["95"].Font = Enum.Font.GothamMedium
+		StartAnimation["95"].TextSize = 20
+		StartAnimation["95"].TextColor3 = ThemeColor.Text
+		StartAnimation["95"].TextXAlignment = Enum.TextXAlignment.Center
+		StartAnimation["95"].Size = UDim2.new(1, -20, 0, 32)
+		ThemeInstances["Text"][#ThemeInstances["Text"] + 1] = StartAnimation["95"]
 
-    -- Subtitle (footer)
-    StartAnimation["96"] = Instance.new("TextLabel", StartAnimation["92"])
-    StartAnimation["96"].Name                   = "Subtitle"
-    StartAnimation["96"].LayoutOrder            = 2
-    StartAnimation["96"].BackgroundTransparency = 1
-    StartAnimation["96"].BorderSizePixel        = 0
-    StartAnimation["96"].Text                   = options.Footer
-    StartAnimation["96"].Font                   = Enum.Font.Gotham
-    StartAnimation["96"].TextSize               = 11
-    StartAnimation["96"].TextColor3             = ThemeColor.Text
-    StartAnimation["96"].TextXAlignment         = Enum.TextXAlignment.Center
-    StartAnimation["96"].Size                   = UDim2.new(1, -20, 0, 18)
-    ThemeInstances["Text"][#ThemeInstances["Text"] + 1] = StartAnimation["96"]
+		-- Subtitle (footer)
+		StartAnimation["96"] = Instance.new("TextLabel", StartAnimation["92"])
+		StartAnimation["96"].Name = "Subtitle"
+		StartAnimation["96"].LayoutOrder = 2
+		StartAnimation["96"].BackgroundTransparency = 1
+		StartAnimation["96"].BorderSizePixel = 0
+		StartAnimation["96"].Text = options.Footer
+		StartAnimation["96"].Font = Enum.Font.Gotham
+		StartAnimation["96"].TextSize = 11
+		StartAnimation["96"].TextColor3 = ThemeColor.Text
+		StartAnimation["96"].TextXAlignment = Enum.TextXAlignment.Center
+		StartAnimation["96"].Size = UDim2.new(1, -20, 0, 18)
+		ThemeInstances["Text"][#ThemeInstances["Text"] + 1] = StartAnimation["96"]
 
-    -- Load bar background
-    StartAnimation["97"] = Instance.new("Frame", StartAnimation["92"])
-    StartAnimation["97"].Name                   = "LoadBack"
-    StartAnimation["97"].LayoutOrder            = 3
-    StartAnimation["97"].ZIndex                 = 2
-    StartAnimation["97"].BackgroundColor3       = ThemeColor.Textbox
-    StartAnimation["97"].Size                   = UDim2.new(0, 285, 0, 6)
-    ThemeInstances["Textbox"][#ThemeInstances["Textbox"] + 1] = StartAnimation["97"]
-    StartAnimation["98"] = Instance.new("UICorner", StartAnimation["97"])
-    StartAnimation["98"].CornerRadius            = UDim.new(0, 7)
+		-- Load bar background
+		StartAnimation["97"] = Instance.new("Frame", StartAnimation["92"])
+		StartAnimation["97"].Name = "LoadBack"
+		StartAnimation["97"].LayoutOrder = 3
+		StartAnimation["97"].ZIndex = 2
+		StartAnimation["97"].BackgroundColor3 = ThemeColor.Textbox
+		StartAnimation["97"].Size = UDim2.new(0, 285, 0, 6)
+		ThemeInstances["Textbox"][#ThemeInstances["Textbox"] + 1] = StartAnimation["97"]
+		StartAnimation["98"] = Instance.new("UICorner", StartAnimation["97"])
+		StartAnimation["98"].CornerRadius = UDim.new(0, 7)
 
-    -- Load bar fill
-    StartAnimation["99"] = Instance.new("Frame", StartAnimation["97"])
-    StartAnimation["99"].Name                   = "LoadFront"
-    StartAnimation["99"].ZIndex                 = 2
-    StartAnimation["99"].BackgroundColor3       = Color3.fromRGB(255, 255, 255)
-    StartAnimation["99"].Size                   = UDim2.new(0, 0, 1, 0)
-    ThemeInstances["Main"][#ThemeInstances["Main"] + 1] = StartAnimation["99"]
-    StartAnimation["9a"] = Instance.new("UICorner", StartAnimation["99"])
-    StartAnimation["9a"].CornerRadius            = UDim.new(0, 7)
-    StartAnimation["9b"] = Instance.new("UIGradient", StartAnimation["99"])
-    StartAnimation["9b"].Color                  = ThemeColor.Tertiary
-    ThemeInstances["Tertiary"][#ThemeInstances["Tertiary"] + 1] = StartAnimation["9b"]
+		-- Load bar fill
+		StartAnimation["99"] = Instance.new("Frame", StartAnimation["97"])
+		StartAnimation["99"].Name = "LoadFront"
+		StartAnimation["99"].ZIndex = 2
+		StartAnimation["99"].BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		StartAnimation["99"].Size = UDim2.new(0, 0, 1, 0)
+		ThemeInstances["Main"][#ThemeInstances["Main"] + 1] = StartAnimation["99"]
+		StartAnimation["9a"] = Instance.new("UICorner", StartAnimation["99"])
+		StartAnimation["9a"].CornerRadius = UDim.new(0, 7)
+		StartAnimation["9b"] = Instance.new("UIGradient", StartAnimation["99"])
+		StartAnimation["9b"].Color = ThemeColor.Tertiary
+		ThemeInstances["Tertiary"][#ThemeInstances["Tertiary"] + 1] = StartAnimation["9b"]
 
-    -- Avatar in bottom-left
-    StartAnimation["9c"] = Instance.new("ImageLabel", StartAnimation["92"])
-    StartAnimation["9c"].Name                   = "CharAva"
-    StartAnimation["9c"].ZIndex                 = 2
-    StartAnimation["9c"].BackgroundTransparency = 1
-    StartAnimation["9c"].Image                  = Players:GetUserThumbnailAsync(
-        LocalPlayer.UserId,
-        Enum.ThumbnailType.HeadShot,
-        Enum.ThumbnailSize.Size100x100
-    )
-    StartAnimation["9c"].Size                   = UDim2.new(0, 70, 0, 70)
-    StartAnimation["9c"].AnchorPoint            = Vector2.new(0, 1)
-    StartAnimation["9c"].Position               = UDim2.new(0, 12, 1, -12)
-    StartAnimation["9d"] = Instance.new("UICorner", StartAnimation["9c"])
-    StartAnimation["9d"].CornerRadius            = UDim.new(1, 8)
+		-- Avatar in bottom-left
+		StartAnimation["9c"] = Instance.new("ImageLabel", StartAnimation["92"])
+		StartAnimation["9c"].Name = "CharAva"
+		StartAnimation["9c"].ZIndex = 2
+		StartAnimation["9c"].BackgroundTransparency = 1
+		StartAnimation["9c"].Image = Players:GetUserThumbnailAsync(
+			LocalPlayer.UserId,
+			Enum.ThumbnailType.HeadShot,
+			Enum.ThumbnailSize.Size100x100
+		)
+		StartAnimation["9c"].Size = UDim2.new(0, 70, 0, 70)
+		StartAnimation["9c"].AnchorPoint = Vector2.new(0, 1)
+		StartAnimation["9c"].Position = UDim2.new(0, 12, 1, -12)
+		StartAnimation["9d"] = Instance.new("UICorner", StartAnimation["9c"])
+		StartAnimation["9d"].CornerRadius = UDim.new(1, 8)
 
-    -- Welcome text next to avatar
-    StartAnimation["9e"] = Instance.new("TextLabel", StartAnimation["92"])
-    StartAnimation["9e"].Name                   = "WelcomeText"
-    StartAnimation["9e"].ZIndex                 = 2
-    StartAnimation["9e"].BackgroundTransparency = 1
-    StartAnimation["9e"].TextWrapped            = true
-    StartAnimation["9e"].Text                   = "Welcome, " .. Players.LocalPlayer.Name
-    StartAnimation["9e"].Font                   = Enum.Font.GothamMedium
-    StartAnimation["9e"].TextSize               = 19
-    StartAnimation["9e"].TextColor3             = ThemeColor.Text
-    StartAnimation["9e"].TextXAlignment         = Enum.TextXAlignment.Left
-    StartAnimation["9e"].AnchorPoint            = Vector2.new(0, 1)
-    StartAnimation["9e"].Position               = UDim2.new(0, 98, 1, -30)
-    ThemeInstances["Text"][#ThemeInstances["Text"] + 1] = StartAnimation["9e"]
-end
-
-
+		-- Welcome text next to avatar
+		StartAnimation["9e"] = Instance.new("TextLabel", StartAnimation["92"])
+		StartAnimation["9e"].Name = "WelcomeText"
+		StartAnimation["9e"].ZIndex = 2
+		StartAnimation["9e"].BackgroundTransparency = 1
+		StartAnimation["9e"].TextWrapped = true
+		StartAnimation["9e"].Text = "Welcome, " .. Players.LocalPlayer.Name
+		StartAnimation["9e"].Font = Enum.Font.GothamMedium
+		StartAnimation["9e"].TextSize = 19
+		StartAnimation["9e"].TextColor3 = ThemeColor.Text
+		StartAnimation["9e"].TextXAlignment = Enum.TextXAlignment.Left
+		StartAnimation["9e"].AnchorPoint = Vector2.new(0, 1)
+		StartAnimation["9e"].Position = UDim2.new(0, 98, 1, -30)
+		ThemeInstances["Text"][#ThemeInstances["Text"] + 1] = StartAnimation["9e"]
+	end
 
 	local KeySystem = {}
 
--- Start animation
-do
-    task.spawn(function()
-        Library.Sliding = true
+	-- Start animation
+	do
+		task.spawn(function()
+			Library.Sliding = true
 
-        -- 1) Expand the panel
-        Library:Tween(StartAnimation["92"], {
-            Length = 1,
-            Goal   = { Size = UDim2.new(0, 310, 0, 230) },
-        })
-        task.wait(1)
+			-- 1) Expand the panel
+			Library:Tween(StartAnimation["92"], {
+				Length = 1,
+				Goal = { Size = UDim2.new(0, 310, 0, 230) },
+			})
+			task.wait(1)
 
-        -- 2) Fill the progress bar
-        Library:Tween(StartAnimation["99"], {
-            Length    = 0.5,
-            Direction = Enum.EasingDirection.In,
-            Goal      = { Size = UDim2.new(1, 0, 1, 0) },
-        })
-        task.wait(0.6)
+			-- 2) Fill the progress bar
+			Library:Tween(StartAnimation["99"], {
+				Length = 0.5,
+				Direction = Enum.EasingDirection.In,
+				Goal = { Size = UDim2.new(1, 0, 1, 0) },
+			})
+			task.wait(0.6)
 
-        -- 3) Fade out the bar backgrounds
-        Library:Tween(StartAnimation["97"], {
-            Length = 0.5,
-            Goal   = { BackgroundTransparency = 1 },
-        })
-        Library:Tween(StartAnimation["99"], {
-            Length = 0.5,
-            Goal   = { BackgroundTransparency = 1 },
-        })
+			-- 3) Fade out the bar backgrounds
+			Library:Tween(StartAnimation["97"], {
+				Length = 0.5,
+				Goal = { BackgroundTransparency = 1 },
+			})
+			Library:Tween(StartAnimation["99"], {
+				Length = 0.5,
+				Goal = { BackgroundTransparency = 1 },
+			})
 
-        local KeyChecked = false
+			local KeyChecked = false
 
-        if options.KeySystem then
-            KeySystem = { CorrectKey = false, Attempts = Gui.MaxAttempts }
+			if options.KeySystem then
+				KeySystem = { CorrectKey = false, Attempts = Gui.MaxAttempts }
 
-            -- Hide main avatar & welcome while entering key
-            StartAnimation["9c"].Visible = false
-            StartAnimation["9e"].Visible = false
+				-- Hide main avatar & welcome while entering key
+				StartAnimation["9c"].Visible = false
+				StartAnimation["9e"].Visible = false
 
-            -- KeySystem container (bigger, with padding)
-            local keyContainer = Instance.new("Frame", StartAnimation["92"])
-            keyContainer.Name                   = "KeySystemContainer"
-            keyContainer.Size                   = UDim2.new(1, -32, 0, 220)
-            keyContainer.Position               = UDim2.new(0, 16, 1, 0)       -- start off-screen
-            keyContainer.BackgroundTransparency = 1
+				-- KeySystem container (bigger, with padding)
+				local keyContainer = Instance.new("Frame", StartAnimation["92"])
+				keyContainer.Name = "KeySystemContainer"
+				keyContainer.Size = UDim2.new(1, -32, 0, 220)
+				keyContainer.Position = UDim2.new(0, 16, 1, 0) -- start off-screen
+				keyContainer.BackgroundTransparency = 1
 
-            -- Slide in the container
-            Library:Tween(keyContainer, {
-                Length    = 0.6,
-                Direction = Enum.EasingDirection.Out,
-                Goal      = { Position = UDim2.new(0, 16, 0.5, -110) }, 
-            })
+				-- Slide in the container
+				Library:Tween(keyContainer, {
+					Length = 0.6,
+					Direction = Enum.EasingDirection.Out,
+					Goal = { Position = UDim2.new(0, 16, 0.5, -110) },
+				})
 
-            -- Avatar at the top-center of the key prompt
-            local avatar = Instance.new("ImageLabel", keyContainer)
-            avatar.Name                   = "UserAvatar"
-            avatar.Size                   = UDim2.new(0, 80, 0, 80)
-            avatar.AnchorPoint            = Vector2.new(0.5, 0)
-            avatar.Position               = UDim2.new(0.5, 0, 0, 0)
-            avatar.BackgroundTransparency = 1
-            avatar.Image = Players:GetUserThumbnailAsync(
-                LocalPlayer.UserId,
-                Enum.ThumbnailType.HeadShot,
-                Enum.ThumbnailSize.Size100x100
-            )
-            local avCorn = Instance.new("UICorner", avatar)
-            avCorn.CornerRadius = UDim.new(1, 0)
+				-- Avatar at the top-center of the key prompt
+				local avatar = Instance.new("ImageLabel", keyContainer)
+				avatar.Name = "UserAvatar"
+				avatar.Size = UDim2.new(0, 80, 0, 80)
+				avatar.AnchorPoint = Vector2.new(0.5, 0)
+				avatar.Position = UDim2.new(0.5, 0, 0, 0)
+				avatar.BackgroundTransparency = 1
+				avatar.Image = Players:GetUserThumbnailAsync(
+					LocalPlayer.UserId,
+					Enum.ThumbnailType.HeadShot,
+					Enum.ThumbnailSize.Size100x100
+				)
+				local avCorn = Instance.new("UICorner", avatar)
+				avCorn.CornerRadius = UDim.new(1, 0)
 
-            -- Input frame + TextBox
-            local inputFrame = Instance.new("Frame", keyContainer)
-            inputFrame.Name                 = "InputFrame"
-            inputFrame.Size                 = UDim2.new(1, 0, 0, 36)
-            inputFrame.Position             = UDim2.new(0, 0, 0, 80 + 16)
-            inputFrame.BackgroundColor3     = ThemeColor.Textbox
-            inputFrame.BorderSizePixel      = 0
-            local iCorn = Instance.new("UICorner", inputFrame)
-            iCorn.CornerRadius = UDim.new(0, 6)
-            local stroke = Instance.new("UIStroke", inputFrame)
-            stroke.Color       = ThemeColor.MainTrue
-            stroke.Thickness   = 2
+				-- Input frame + TextBox
+				local inputFrame = Instance.new("Frame", keyContainer)
+				inputFrame.Name = "InputFrame"
+				inputFrame.Size = UDim2.new(1, 0, 0, 36)
+				inputFrame.Position = UDim2.new(0, 0, 0, 80 + 16)
+				inputFrame.BackgroundColor3 = ThemeColor.Textbox
+				inputFrame.BorderSizePixel = 0
+				local iCorn = Instance.new("UICorner", inputFrame)
+				iCorn.CornerRadius = UDim.new(0, 6)
+				local stroke = Instance.new("UIStroke", inputFrame)
+				stroke.Color = ThemeColor.MainTrue
+				stroke.Thickness = 2
 
-            local keyBox = Instance.new("TextBox", inputFrame)
-            keyBox.Name                   = "KeyTextBox"
-            keyBox.Size                   = UDim2.new(1, -14, 1, -14)
-            keyBox.Position               = UDim2.new(0, 7, 0, 7)
-            keyBox.BackgroundTransparency = 1
-            keyBox.PlaceholderText        = "Enter key..."
-            keyBox.PlaceholderColor3      = ThemeColor.PlaceholderText
-            keyBox.Text                   = ""
-            keyBox.TextColor3             = ThemeColor.Text
-            keyBox.Font                   = Enum.Font.Gotham
-            keyBox.TextSize               = 14
-            keyBox.TextXAlignment         = Enum.TextXAlignment.Left
+				local keyBox = Instance.new("TextBox", inputFrame)
+				keyBox.Name = "KeyTextBox"
+				keyBox.Size = UDim2.new(1, -14, 1, -14)
+				keyBox.Position = UDim2.new(0, 7, 0, 7)
+				keyBox.BackgroundTransparency = 1
+				keyBox.PlaceholderText = "Enter key..."
+				keyBox.PlaceholderColor3 = ThemeColor.PlaceholderText
+				keyBox.Text = ""
+				keyBox.TextColor3 = ThemeColor.Text
+				keyBox.Font = Enum.Font.Gotham
+				keyBox.TextSize = 14
+				keyBox.TextXAlignment = Enum.TextXAlignment.Left
 
-            -- Discord invite button
-            local discordBtn = Instance.new("TextButton", keyContainer)
-            discordBtn.Name               = "CopyDiscordButton"
-            discordBtn.Size               = UDim2.new(0.6, 0, 0, 36)
-            discordBtn.AnchorPoint        = Vector2.new(0.5, 0)
-            discordBtn.Position           = UDim2.new(0.5, 0, 0, 80 + 16 + 36 + 16)
-            discordBtn.BackgroundColor3   = ThemeColor.MainTrue
-            discordBtn.Font               = Enum.Font.GothamBold
-            discordBtn.TextSize           = 14
-            discordBtn.TextColor3         = Color3.new(1, 1, 1)
-            discordBtn.Text               = "Copy Discord Invite"
-            local bCorn = Instance.new("UICorner", discordBtn)
-            bCorn.CornerRadius = UDim.new(0, 6)
+				-- Discord invite button
+				local discordBtn = Instance.new("TextButton", keyContainer)
+				discordBtn.Name = "CopyDiscordButton"
+				discordBtn.Size = UDim2.new(0.6, 0, 0, 36)
+				discordBtn.AnchorPoint = Vector2.new(0.5, 0)
+				discordBtn.Position = UDim2.new(0.5, 0, 0, 80 + 16 + 36 + 16)
+				discordBtn.BackgroundColor3 = ThemeColor.MainTrue
+				discordBtn.Font = Enum.Font.GothamBold
+				discordBtn.TextSize = 14
+				discordBtn.TextColor3 = Color3.new(1, 1, 1)
+				discordBtn.Text = "Copy Discord Invite"
+				local bCorn = Instance.new("UICorner", discordBtn)
+				bCorn.CornerRadius = UDim.new(0, 6)
 
-            discordBtn.MouseEnter:Connect(function()
-                stroke.Color = ThemeColor.SecondaryTrue
-                Library:PlaySound(LibSettings.HoverSound)
-            end)
-            discordBtn.MouseLeave:Connect(function()
-                stroke.Color = ThemeColor.MainTrue
-            end)
-            discordBtn.MouseButton1Click:Connect(function()
-                pcall(function() setclipboard(Gui.DiscordLink) end)
-                Library:ForceNotify({
-                    Name     = "Discord",
-                    Text     = "Copied invite!",
-                    Icon     = "rbxassetid://11401835376",
-                    Duration = 3,
-                })
-            end)
+				discordBtn.MouseEnter:Connect(function()
+					stroke.Color = ThemeColor.SecondaryTrue
+					Library:PlaySound(LibSettings.HoverSound)
+				end)
+				discordBtn.MouseLeave:Connect(function()
+					stroke.Color = ThemeColor.MainTrue
+				end)
+				discordBtn.MouseButton1Click:Connect(function()
+					pcall(function()
+						setclipboard(Gui.DiscordLink)
+					end)
+					Library:ForceNotify({
+						Name = "Discord",
+						Text = "Copied invite!",
+						Icon = "rbxassetid://11401835376",
+						Duration = 3,
+					})
+				end)
 
-            -- Footer title at bottom-left
-            local footer = Instance.new("TextLabel", keyContainer)
-            footer.Name                   = "KeySystemFooter"
-            footer.Size                   = UDim2.new(0, 100, 0, 24)
-            footer.AnchorPoint            = Vector2.new(0, 1)
-            footer.Position               = UDim2.new(0, 16, 1, -16)
-            footer.BackgroundTransparency = 1
-            footer.Font                   = Enum.Font.GothamBold
-            footer.TextSize               = 14
-            footer.TextColor3             = ThemeColor.Text
-            footer.Text                   = "Key System"
+				-- Footer title at bottom-left
+				local footer = Instance.new("TextLabel", keyContainer)
+				footer.Name = "KeySystemFooter"
+				footer.Size = UDim2.new(0, 100, 0, 24)
+				footer.AnchorPoint = Vector2.new(0, 1)
+				footer.Position = UDim2.new(0, 16, 1, -16)
+				footer.BackgroundTransparency = 1
+				footer.Font = Enum.Font.GothamBold
+				footer.TextSize = 14
+				footer.TextColor3 = ThemeColor.Text
+				footer.Text = "Key System"
 
-            -- Handle key submission
-            keyBox.FocusLost:Connect(function()
-                local entered = keyBox.Text
-                if entered ~= "" then
-                    if entered == Gui.Key then
-                        KeySystem.CorrectKey = true
-                        Library:ForceNotify({
-                            Name     = "KeySystem",
-                            Text     = "Correct key!",
-                            Icon     = "rbxassetid://11401835376",
-                            Duration = 3,
-                        })
-                    else
-                        KeySystem.Attempts = KeySystem.Attempts - 1
-                        Library:ForceNotify({
-                            Name     = "KeySystem",
-                            Text     = "Incorrect! " .. KeySystem.Attempts .. " attempts left",
-                            Icon     = "rbxassetid://11401835376",
-                            Duration = 3,
-                        })
-                        if KeySystem.Attempts <= 0 then
-                            game.Players.LocalPlayer:Kick("Too many failed attempts")
-                        end
-                    end
-                    keyBox.Text = ""
-                end
-            end)
+				-- Handle key submission
+				keyBox.FocusLost:Connect(function()
+					local entered = keyBox.Text
+					if entered ~= "" then
+						if entered == Gui.Key then
+							KeySystem.CorrectKey = true
+							Library:ForceNotify({
+								Name = "KeySystem",
+								Text = "Correct key!",
+								Icon = "rbxassetid://11401835376",
+								Duration = 3,
+							})
+						else
+							KeySystem.Attempts = KeySystem.Attempts - 1
+							Library:ForceNotify({
+								Name = "KeySystem",
+								Text = "Incorrect! " .. KeySystem.Attempts .. " attempts left",
+								Icon = "rbxassetid://11401835376",
+								Duration = 3,
+							})
+							if KeySystem.Attempts <= 0 then
+								game.Players.LocalPlayer:Kick("Too many failed attempts")
+							end
+						end
+						keyBox.Text = ""
+					end
+				end)
 
-            -- Wait until the correct key is entered
-            repeat task.wait() until KeySystem.CorrectKey
+				-- Wait until the correct key is entered
+				repeat
+					task.wait()
+				until KeySystem.CorrectKey
 
-            -- Slide out & destroy
-            Library:Tween(keyContainer, {
-                Length    = 0.4,
-                Direction = Enum.EasingDirection.In,
-                Goal      = { Position = UDim2.new(0, 16, 1, 0) },
-            })
-            task.wait(0.5)
-            keyContainer:Destroy()
+				-- Slide out & destroy
+				Library:Tween(keyContainer, {
+					Length = 0.4,
+					Direction = Enum.EasingDirection.In,
+					Goal = { Position = UDim2.new(0, 16, 1, 0) },
+				})
+				task.wait(0.5)
+				keyContainer:Destroy()
 
-            -- Restore main avatar & welcome
-            StartAnimation["9c"].Visible = true
-            StartAnimation["9e"].Visible = true
+				-- Restore main avatar & welcome
+				StartAnimation["9c"].Visible = true
+				StartAnimation["9e"].Visible = true
 
-            KeyChecked = true
-        else
-            KeyChecked = true
-        end
+				KeyChecked = true
+			else
+				KeyChecked = true
+			end
 
-        -- Wait for KeySystem step to finish
-        repeat
-            task.wait()
-        until KeyChecked
+			-- Wait for KeySystem step to finish
+			repeat
+				task.wait()
+			until KeyChecked
 
-        task.wait(0.3)
+			task.wait(0.3)
 
-        -- 4) Final reveal of the main UI
-        Library:Tween(StartAnimation["92"], {
-            Length = 1,
-            Goal   = { Position = UDim2.new(0, 0, 0, 0) },
-        })
-        Library:Tween(StartAnimation["92"], {
-            Length = 1,
-            Goal   = { Size = UDim2.new(0, 498, 0, 452) },
-        })
-        Library:Tween(StartAnimation["9e"], {
-            Length = 0.7,
-            Goal   = { TextTransparency = 0 },
-        })
-        Library:Tween(StartAnimation["9c"], {
-            Length = 0.7,
-            Goal   = { ImageTransparency = 0, BackgroundTransparency = 0 },
-        })
-        task.wait(1)
+			-- 4) Final reveal of the main UI
+			Library:Tween(StartAnimation["92"], {
+				Length = 1,
+				Goal = { Position = UDim2.new(0, 0, 0, 0) },
+			})
+			Library:Tween(StartAnimation["92"], {
+				Length = 1,
+				Goal = { Size = UDim2.new(0, 498, 0, 452) },
+			})
+			Library:Tween(StartAnimation["9e"], {
+				Length = 0.7,
+				Goal = { TextTransparency = 0 },
+			})
+			Library:Tween(StartAnimation["9c"], {
+				Length = 0.7,
+				Goal = { ImageTransparency = 0, BackgroundTransparency = 0 },
+			})
+			task.wait(1)
 
-        Gui["2"].Size    = UDim2.new(0, 498, 0, 0)
-        Gui["2"].Visible = true
-        task.wait(1.8)
+			Gui["2"].Size = UDim2.new(0, 498, 0, 0)
+			Gui["2"].Visible = true
+			task.wait(1.8)
 
-        Library:Tween(StartAnimation["96"], {
-            Length = 0.7,
-            Goal   = { TextTransparency = 1 },
-        })
-        Library:Tween(StartAnimation["95"], {
-            Length = 0.7,
-            Goal   = { TextTransparency = 1 },
-        })
-        Library:Tween(StartAnimation["9e"], {
-            Length = 0.7,
-            Goal   = { TextTransparency = 1 },
-        })
-        Library:Tween(StartAnimation["9c"], {
-            Length = 0.7,
-            Goal   = { ImageTransparency = 1, BackgroundTransparency = 1 },
-        })
-        task.wait(0.1)
+			Library:Tween(StartAnimation["96"], {
+				Length = 0.7,
+				Goal = { TextTransparency = 1 },
+			})
+			Library:Tween(StartAnimation["95"], {
+				Length = 0.7,
+				Goal = { TextTransparency = 1 },
+			})
+			Library:Tween(StartAnimation["9e"], {
+				Length = 0.7,
+				Goal = { TextTransparency = 1 },
+			})
+			Library:Tween(StartAnimation["9c"], {
+				Length = 0.7,
+				Goal = { ImageTransparency = 1, BackgroundTransparency = 1 },
+			})
+			task.wait(0.1)
 
-        Gui["3"].Position = UDim2.new(0, 0, 0, 300)
-        Gui["2"].Size     = UDim2.new(0, 498, 0, 498)
+			Gui["3"].Position = UDim2.new(0, 0, 0, 300)
+			Gui["2"].Size = UDim2.new(0, 498, 0, 498)
 
-        Library:Tween(Gui["3"], {
-            Length = 1.5,
-            Goal   = { Position = UDim2.new(0, 0, 0, 455) },
-        })
-        task.wait(2)
+			Library:Tween(Gui["3"], {
+				Length = 1.5,
+				Goal = { Position = UDim2.new(0, 0, 0, 455) },
+			})
+			task.wait(2)
 
-        Library:Tween(StartAnimation["92"], {
-            Length = 0.5,
-            Goal   = { BackgroundTransparency = 1 },
-        })
+			Library:Tween(StartAnimation["92"], {
+				Length = 0.5,
+				Goal = { BackgroundTransparency = 1 },
+			})
 
-        Library.Sliding = false
-        Library.Loaded  = true
+			Library.Sliding = false
+			Library.Loaded = true
 
-        task.spawn(function()
-            task.wait(1)
-            Library:SetTheme({})
-        end)
-    end)
-end
-
-
+			task.spawn(function()
+				task.wait(1)
+				Library:SetTheme({})
+			end)
+		end)
+	end
 
 	function Gui:Tab(options)
 		options = Library:PlaceDefaults({

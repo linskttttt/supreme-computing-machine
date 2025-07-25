@@ -1221,596 +1221,261 @@ end
 
 	local KeySystem = {}
 
-	-- Start animation
-	do
-		task.spawn(function()
-			Library.Sliding = true
+-- Start animation
+do
+    task.spawn(function()
+        Library.Sliding = true
+
+        -- 1) Expand the panel
+        Library:Tween(StartAnimation["92"], {
+            Length = 1,
+            Goal   = { Size = UDim2.new(0, 310, 0, 230) },
+        })
+        task.wait(1)
+
+        -- 2) Fill the progress bar
+        Library:Tween(StartAnimation["99"], {
+            Length    = 0.5,
+            Direction = Enum.EasingDirection.In,
+            Goal      = { Size = UDim2.new(1, 0, 1, 0) },
+        })
+        task.wait(0.6)
+
+        -- 3) Fade out the bar backgrounds
+        Library:Tween(StartAnimation["97"], {
+            Length = 0.5,
+            Goal   = { BackgroundTransparency = 1 },
+        })
+        Library:Tween(StartAnimation["99"], {
+            Length = 0.5,
+            Goal   = { BackgroundTransparency = 1 },
+        })
+
+        local KeyChecked = false
+
+        if options.KeySystem then
+            KeySystem = { CorrectKey = false, Attempts = Gui.MaxAttempts }
+
+            -- Hide avatar & welcome while entering key
+            StartAnimation["9c"].Visible = false
+            StartAnimation["9e"].Visible = false
+
+            -- Container for all KeySystem UI
+            local keyContainer = Instance.new("Frame", StartAnimation["92"])
+            keyContainer.Name               = "KeySystemContainer"
+            keyContainer.Size               = UDim2.new(1, -40, 0, 160)
+            keyContainer.Position           = UDim2.new(0, 20, 0.5, -80)
+            keyContainer.BackgroundTransparency = 1
+
+            local padding = Instance.new("UIPadding", keyContainer)
+            padding.PaddingTop    = UDim.new(0, 12)
+            padding.PaddingBottom = UDim.new(0, 12)
+            padding.PaddingLeft   = UDim.new(0, 12)
+            padding.PaddingRight  = UDim.new(0, 12)
+
+            local layout = Instance.new("UIListLayout", keyContainer)
+            layout.FillDirection       = Enum.FillDirection.Vertical
+            layout.SortOrder           = Enum.SortOrder.LayoutOrder
+            layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+            layout.Padding             = UDim.new(0, 8)
+
+            -- Title
+            local keyTitle = Instance.new("TextLabel", keyContainer)
+            keyTitle.Name               = "KeySystemTitle"
+            keyTitle.LayoutOrder        = 1
+            keyTitle.Size               = UDim2.new(1, 0, 0, 24)
+            keyTitle.BackgroundTransparency = 1
+            keyTitle.Font               = Enum.Font.GothamBold
+            keyTitle.TextSize           = 18
+            keyTitle.TextColor3         = ThemeColor.Text
+            keyTitle.Text               = "Key System"
+            keyTitle.TextXAlignment     = Enum.TextXAlignment.Center
+
+            -- Input frame + TextBox
+            local inputFrame = Instance.new("Frame", keyContainer)
+            inputFrame.Name               = "InputFrame"
+            inputFrame.LayoutOrder        = 2
+            inputFrame.Size               = UDim2.new(1, 0, 0, 36)
+            inputFrame.BackgroundColor3   = ThemeColor.Textbox
+            inputFrame.BorderSizePixel    = 0
+            local iCorn = Instance.new("UICorner", inputFrame)
+            iCorn.CornerRadius             = UDim.new(0, 6)
+            local stroke = Instance.new("UIStroke", inputFrame)
+            stroke.Color                   = ThemeColor.MainTrue
+            stroke.Thickness               = 2
+
+            local keyBox = Instance.new("TextBox", inputFrame)
+            keyBox.Name                     = "KeyTextBox"
+            keyBox.Size                     = UDim2.new(1, -14, 1, -14)
+            keyBox.Position                 = UDim2.new(0, 7, 0, 7)
+            keyBox.BackgroundTransparency   = 1
+            keyBox.PlaceholderText          = "Enter key..."
+            keyBox.PlaceholderColor3        = ThemeColor.PlaceholderText
+            keyBox.Text                     = ""
+            keyBox.TextColor3               = ThemeColor.Text
+            keyBox.Font                     = Enum.Font.Gotham
+            keyBox.TextSize                 = 14
+            keyBox.TextXAlignment           = Enum.TextXAlignment.Left
+
+            -- Note label
+            local note = Instance.new("TextLabel", keyContainer)
+            note.Name                       = "KeySystemNote"
+            note.LayoutOrder                = 3
+            note.Size                       = UDim2.new(1, 0, 0, 20)
+            note.BackgroundTransparency     = 1
+            note.Font                       = Enum.Font.Gotham
+            note.TextSize                   = 12
+            note.TextColor3                 = ThemeColor.PlaceholderText
+            note.Text                       = "Join our Discord to get the key!"
+            note.TextWrapped                = true
+            note.TextXAlignment             = Enum.TextXAlignment.Center
+
+            -- Discord button
+            local discordBtn = Instance.new("TextButton", keyContainer)
+            discordBtn.Name                 = "CopyDiscordButton"
+            discordBtn.LayoutOrder          = 4
+            discordBtn.Size                 = UDim2.new(0.6, 0, 0, 32)
+            discordBtn.BackgroundColor3     = ThemeColor.MainTrue
+            discordBtn.Font                 = Enum.Font.GothamBold
+            discordBtn.TextSize             = 14
+            discordBtn.TextColor3           = Color3.new(1, 1, 1)
+            discordBtn.Text                 = "Copy Discord Invite"
+            local bCorn = Instance.new("UICorner", discordBtn)
+            bCorn.CornerRadius               = UDim.new(0, 6)
+
+            discordBtn.MouseEnter:Connect(function()
+                stroke.Color = ThemeColor.SecondaryTrue
+                Library:PlaySound(LibSettings.HoverSound)
+            end)
+            discordBtn.MouseLeave:Connect(function()
+                stroke.Color = ThemeColor.MainTrue
+            end)
+            discordBtn.MouseButton1Click:Connect(function()
+                pcall(function() setclipboard(Gui.DiscordLink) end)
+                Library:ForceNotify({
+                    Name     = "Discord",
+                    Text     = "Copied invite!",
+                    Icon     = "rbxassetid://11401835376",
+                    Duration = 3,
+                })
+            end)
+
+            -- Handle key submission
+            keyBox.FocusLost:Connect(function()
+                local entered = keyBox.Text
+                if entered ~= "" then
+                    if entered == Gui.Key then
+                        KeySystem.CorrectKey = true
+                        Library:ForceNotify({
+                            Name     = "KeySystem",
+                            Text     = "Correct key!",
+                            Icon     = "rbxassetid://11401835376",
+                            Duration = 3,
+                        })
+                    else
+                        KeySystem.Attempts = KeySystem.Attempts - 1
+                        Library:ForceNotify({
+                            Name     = "KeySystem",
+                            Text     = "Incorrect! " .. KeySystem.Attempts .. " attempts left",
+                            Icon     = "rbxassetid://11401835376",
+                            Duration = 3,
+                        })
+                        if KeySystem.Attempts <= 0 then
+                            game.Players.LocalPlayer:Kick("Too many failed attempts")
+                        end
+                    end
+                    keyBox.Text = ""
+                end
+            end)
+
+            -- Wait for correct key
+            repeat task.wait() until KeySystem.CorrectKey
+
+            -- Slide the key prompt away
+            keyContainer:TweenPosition(
+                UDim2.new(0, 20, 1, 0),
+                "Out", "Quad", 0.4, true
+            )
+            task.wait(0.5)
+            keyContainer:Destroy()
+
+            -- Show avatar & welcome again
+            StartAnimation["9c"].Visible = true
+            StartAnimation["9e"].Visible = true
+
+            KeyChecked = true
+        else
+            KeyChecked = true
+        end
+
+        -- Wait until key step is done
+        repeat task.wait() until KeyChecked
+        task.wait(0.3)
+
+        -- 4) Finish the slide-in and reveal main UI
+        Library:Tween(StartAnimation["92"], {
+            Length = 1,
+            Goal   = { Position = UDim2.new(0, 0, 0, 0) },
+        })
+        Library:Tween(StartAnimation["92"], {
+            Length = 1,
+            Goal   = { Size = UDim2.new(0, 498, 0, 452) },
+        })
+        Library:Tween(StartAnimation["9e"], {
+            Length = 0.7,
+            Goal   = { TextTransparency = 0 },
+        })
+        Library:Tween(StartAnimation["9c"], {
+            Length = 0.7,
+            Goal   = { ImageTransparency = 0, BackgroundTransparency = 0 },
+        })
+        task.wait(1)
+
+        Gui["2"].Size    = UDim2.new(0, 498, 0, 0)
+        Gui["2"].Visible = true
+        task.wait(1.8)
+
+        Library:Tween(StartAnimation["96"], {
+            Length = 0.7,
+            Goal   = { TextTransparency = 1 },
+        })
+        Library:Tween(StartAnimation["95"], {
+            Length = 0.7,
+            Goal   = { TextTransparency = 1 },
+        })
+        Library:Tween(StartAnimation["9e"], {
+            Length = 0.7,
+            Goal   = { TextTransparency = 1 },
+        })
+        Library:Tween(StartAnimation["9c"], {
+            Length = 0.7,
+            Goal   = { ImageTransparency = 1, BackgroundTransparency = 1 },
+        })
+        task.wait(0.1)
+
+        Gui["3"].Position = UDim2.new(0, 0, 0, 300)
+        Gui["2"].Size     = UDim2.new(0, 498, 0, 498)
+        Library:Tween(Gui["3"], {
+            Length = 1.5,
+            Goal   = { Position = UDim2.new(0, 0, 0, 455) },
+        })
+        task.wait(2)
+
+        Library:Tween(StartAnimation["92"], {
+            Length = 0.5,
+            Goal   = { BackgroundTransparency = 1 },
+        })
+
+        Library.Sliding = false
+        Library.Loaded  = true
+
+        task.spawn(function()
+            task.wait(1)
+            Library:SetTheme({})
+        end)
+    end)
+end
 
-			Library:Tween(StartAnimation["92"], {
-				Length = 1,
-				Goal = { Size = UDim2.new(0, 310, 0, 230) },
-			})
-
-			task.wait(1)
-
-			Library:Tween(StartAnimation["99"], {
-				Length = 0.5,
-				Direction = Enum.EasingDirection.In,
-				Goal = { Size = UDim2.new(1, 0, 1, 0) },
-			})
-			task.wait(0.6)
-
-			Library:Tween(StartAnimation["97"], {
-				Length = 0.5,
-				Goal = { BackgroundTransparency = 1 },
-			})
-
-			Library:Tween(StartAnimation["99"], {
-				Length = 0.5,
-				Goal = { BackgroundTransparency = 1 },
-			})
-
-			local KeyChecked = false
-
-			if options.KeySystem then
-				KeySystem = {
-					CorrectKey = false,
-					KeyTextboxHover = false,
-					Attempts = Gui.MaxAttempts,
-				}
-
-				local KeyConnectionBin = {}
-
-				do
-					-- StarterGui.Vision Lib v2.StartAnimationFrame.Main.Key
-					KeySystem["a0"] = Instance.new("Frame", StartAnimation["92"])
-					KeySystem["a0"]["ZIndex"] = 3
-					KeySystem["a0"]["BackgroundColor3"] = ThemeColor.Textbox
-
-					ThemeInstances["Textbox"][#ThemeInstances["Textbox"] + 1] = KeySystem["a0"]
-
-					KeySystem["a0"]["Size"] = UDim2.new(0, 253, 0, 20)
-					KeySystem["a0"]["Position"] = UDim2.new(0, 28, 0, 33)
-					KeySystem["a0"]["Name"] = [[Key]]
-
-					-- StarterGui.Vision Lib v2.KeySystemFrame.Main.Key.UICorner
-					KeySystem["a1"] = Instance.new("UICorner", KeySystem["a0"])
-					KeySystem["a1"]["CornerRadius"] = UDim.new(0, 4)
-
-					-- StarterGui.Vision Lib v2.KeySystemFrame.Main.Key.UIStroke
-					KeySystem["a2"] = Instance.new("UIStroke", KeySystem["a0"])
-					KeySystem["a2"]["Color"] = ThemeColor.MainTrue
-
-					ThemeInstances["MainTrue"][#ThemeInstances["MainTrue"] + 1] = KeySystem["a2"]
-
-					-- StarterGui.Vision Lib v2.KeySystemFrame.Main.Key.TextBox
-					KeySystem["a4"] = Instance.new("TextBox", KeySystem["a0"])
-					KeySystem["a4"]["CursorPosition"] = -1
-					KeySystem["a4"]["PlaceholderColor3"] = ThemeColor.PlaceholderText
-
-					ThemeInstances["Text"][#ThemeInstances["Text"] + 1] = KeySystem["a4"]
-
-					KeySystem["a4"]["ZIndex"] = 3
-					KeySystem["a4"]["RichText"] = true
-					KeySystem["a4"]["TextColor3"] = ThemeColor.Text
-
-					ThemeInstances["Text"][#ThemeInstances["Text"] + 1] = KeySystem["a4"]
-					KeySystem["a4"]["TextXAlignment"] = Enum.TextXAlignment.Left
-					KeySystem["a4"]["TextSize"] = 11
-					KeySystem["a4"]["BackgroundColor3"] = ThemeColor.Textbox
-
-					ThemeInstances["Textbox"][#ThemeInstances["Textbox"] + 1] = KeySystem["a4"]
-
-					KeySystem["a4"]["AnchorPoint"] = Vector2.new(0.5, 0.5)
-					KeySystem["a4"]["PlaceholderText"] = [[Key | e.g abc123]]
-					KeySystem["a4"]["Size"] = UDim2.new(0.8999999761581421, 0, 0.8999999761581421, 0)
-					KeySystem["a4"]["Text"] = [[]]
-					KeySystem["a4"]["Position"] = UDim2.new(0.5, 0, 0.5, 0)
-					KeySystem["a4"]["Font"] = Enum.Font.Gotham
-
-					-- StarterGui.Vision Lib v2.KeySystemFrame.Main.Key.TextBox.UICorner
-					KeySystem["a5"] = Instance.new("UICorner", KeySystem["a4"])
-					KeySystem["a5"]["CornerRadius"] = UDim.new(0, 4)
-
-					-- StarterGui.Vision Lib v2.KeySystemFrame.Main.KeySystemTitle
-					KeySystem["a6"] = Instance.new("TextLabel", StartAnimation["92"])
-					KeySystem["a6"]["ZIndex"] = 2
-					KeySystem["a6"]["BorderSizePixel"] = 0
-					KeySystem["a6"]["TextXAlignment"] = Enum.TextXAlignment.Left
-					KeySystem["a6"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255)
-					KeySystem["a6"]["TextSize"] = 11
-					KeySystem["a6"]["TextColor3"] = ThemeColor.Text
-
-					ThemeInstances["Text"][#ThemeInstances["Text"] + 1] = KeySystem["a6"]
-					KeySystem["a6"]["Size"] = UDim2.new(0, 158, 0, 16)
-					KeySystem["a6"]["Text"] = [[Key System]]
-					KeySystem["a6"]["Name"] = [[KeySystemTitle]]
-					KeySystem["a6"]["Font"] = Enum.Font.GothamMedium
-					KeySystem["a6"]["BackgroundTransparency"] = 1
-					KeySystem["a6"]["Position"] = UDim2.new(0, 34, 0, 14)
-
-					-- StarterGui.Vision Lib v2.KeySystemFrame.Main.KeySystemNote
-					KeySystem["a8"] = Instance.new("Frame", StartAnimation["92"])
-					KeySystem["a8"]["ZIndex"] = 3
-					KeySystem["a8"]["BackgroundColor3"] = ThemeColor.TertiaryTrue
-					KeySystem["a8"]["Size"] = UDim2.new(0, 215, 0, 50)
-					KeySystem["a8"]["Position"] = UDim2.new(0, 49, 0, 61)
-					KeySystem["a8"]["Name"] = [[KeySystemNote]]
-
-					ThemeInstances["TertiaryTrue"][#ThemeInstances["TertiaryTrue"] + 1] = KeySystem["a8"]
-
-					-- StarterGui.Vision Lib v2.KeySystemFrame.Main.KeySystemNote.TextLabel
-					KeySystem["a9"] = Instance.new("TextLabel", KeySystem["a8"])
-					KeySystem["a9"]["TextWrapped"] = true
-					KeySystem["a9"]["ZIndex"] = 2
-					KeySystem["a9"]["TextXAlignment"] = Enum.TextXAlignment.Left
-					KeySystem["a9"]["TextYAlignment"] = Enum.TextYAlignment.Top
-					KeySystem["a9"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255)
-					KeySystem["a9"]["TextSize"] = 9
-					KeySystem["a9"]["TextColor3"] = ThemeColor.PlaceholderText
-
-					ThemeInstances["Text"][#ThemeInstances["Text"] + 1] = KeySystem["a9"]
-
-					KeySystem["a9"]["AnchorPoint"] = Vector2.new(0.5, 0.5)
-					KeySystem["a9"]["Size"] = UDim2.new(0.949999988079071, 0, 0.800000011920929, 0)
-					KeySystem["a9"]["Text"] = [[Note: Join our discord to get the key!]]
-					KeySystem["a9"]["Font"] = Enum.Font.Gotham
-					KeySystem["a9"]["BackgroundTransparency"] = 1
-					KeySystem["a9"]["Position"] = UDim2.new(0.5, 0, 0.5, 0)
-
-					KeySystem["a0"]["BackgroundTransparency"] = 1
-					KeySystem["a4"]["BackgroundTransparency"] = 1
-					KeySystem["a8"]["BackgroundTransparency"] = 1
-					KeySystem["a4"]["TextTransparency"] = 1
-					KeySystem["a9"]["TextTransparency"] = 1
-					KeySystem["a6"]["TextTransparency"] = 1
-
-					-- StarterGui.Vision Lib v2.KeySystemFrame.Main.KeySystemNote.UICorner
-					KeySystem["aa"] = Instance.new("UICorner", KeySystem["a8"])
-
-					-- Methods
-					do
-						table.insert(
-							KeyConnectionBin,
-							KeySystem["a0"].MouseEnter:Connect(function()
-								Library:Tween(KeySystem["a2"], {
-									Length = 0.2,
-									Goal = { Color = ThemeColor.SecondaryTrue },
-								})
-
-								KeySystem.KeyTextboxHover = true
-								Library:PlaySound(LibSettings.HoverSound)
-							end)
-						)
-
-						table.insert(
-							KeyConnectionBin,
-							KeySystem["a0"].MouseLeave:Connect(function()
-								Library:Tween(KeySystem["a2"], {
-									Length = 0.2,
-									Goal = { Color = ThemeColor.MainTrue },
-								})
-
-								KeySystem.KeyTextboxHover = false
-							end)
-						)
-
-						table.insert(
-							KeyConnectionBin,
-							KeySystem["a4"].FocusLost:Connect(function()
-								local keyEntered = KeySystem["a4"]["Text"]
-
-								if keyEntered ~= "" then
-									if keyEntered == Gui.Key then
-										KeySystem.CorrectKey = true
-
-										Library:ForceNotify({
-											Name = "KeySystem",
-											Text = "Correct key!",
-											Icon = "rbxassetid://11401835376",
-											Duration = 3,
-										})
-									else
-										KeySystem.Attempts = KeySystem.Attempts - 1
-
-										Library:ForceNotify({
-											Name = "KeySystem",
-											Text = "Incorrect key! You still have "
-												.. tostring(KeySystem.Attempts)
-												.. " attempts left!",
-											Icon = "rbxassetid://11401835376",
-											Duration = 3,
-										})
-									end
-
-									KeySystem["a4"]["Text"] = ""
-
-									if KeySystem.Attempts == 0 then
-										game.Players.LocalPlayer:Kick("Too many failed attempts")
-									end
-
-									if KeySystem.KeyTextboxHover then
-										Library:Tween(KeySystem["a2"], {
-											Length = 0.2,
-											Goal = { Color = Color3.fromRGB(93, 93, 93) },
-										})
-									else
-										Library:Tween(KeySystem["a2"], {
-											Length = 0.2,
-											Goal = { Color = ThemeColor.SecondaryTrue },
-										})
-									end
-								end
-							end)
-						)
-					end
-				end
-
-				do
-					-- Others tween
-					do
-						Library:Tween(StartAnimation["92"], {
-							Length = 1,
-							Goal = { Position = UDim2.new(0, 92, 0, 159) },
-						})
-
-						Library:Tween(StartAnimation["92"], {
-							Length = 1,
-							Goal = { Size = UDim2.new(0, 310, 0, 154) },
-						})
-
-						Library:Tween(StartAnimation["96"], {
-							Length = 0.7,
-							Goal = { TextTransparency = 1 },
-						})
-
-						Library:Tween(StartAnimation["95"], {
-							Length = 0.7,
-							Goal = { TextTransparency = 1 },
-						})
-					end
-
-					task.wait(1)
-
-					-- Ui tween
-					do
-						Library:Tween(KeySystem["a4"], {
-							Length = 0.7,
-							Goal = { TextTransparency = 0 },
-						})
-
-						Library:Tween(KeySystem["a9"], {
-							Length = 0.7,
-							Goal = { TextTransparency = 0 },
-						})
-
-						Library:Tween(KeySystem["a6"], {
-							Length = 0.7,
-							Goal = { TextTransparency = 0 },
-						})
-
-						Library:Tween(KeySystem["a8"], {
-							Length = 0.7,
-							Goal = { BackgroundTransparency = 0 },
-						})
-
-						Library:Tween(KeySystem["a4"], {
-							Length = 0.7,
-							Goal = { BackgroundTransparency = 0 },
-						})
-
-						Library:Tween(KeySystem["a0"], {
-							Length = 0.7,
-							Goal = { BackgroundTransparency = 0 },
-						})
-					end
-				end
-
-				if Gui.DiscordLink ~= nil then
-					-- StarterGui.Vision Lib v2.KeySystemFrame.Main.DiscordServerButton
-					KeySystem["ab"] = Instance.new("TextButton", StartAnimation["92"])
-					KeySystem["ab"]["TextStrokeTransparency"] = 0
-					KeySystem["ab"]["ZIndex"] = 3
-					KeySystem["ab"]["AutoButtonColor"] = false
-					KeySystem["ab"]["TextSize"] = 12
-					KeySystem["ab"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255)
-					KeySystem["ab"]["TextColor3"] = ThemeColor.Text
-
-					ThemeInstances["Text"][#ThemeInstances["Text"] + 1] = KeySystem["ab"]
-					KeySystem["ab"]["Size"] = UDim2.new(0, 100, 0, 19)
-					KeySystem["ab"]["Name"] = [[DiscordServerButton]]
-					KeySystem["ab"]["Text"] = [[Copy discord invite]]
-					KeySystem["ab"]["Font"] = Enum.Font.Gotham
-					KeySystem["ab"]["Position"] = UDim2.new(0, 104, 0, 118)
-					KeySystem["ab"]["MaxVisibleGraphemes"] = 0
-
-					-- StarterGui.Vision Lib v2.KeySystemFrame.Main.DiscordServerButton.TextLabel
-					KeySystem["ac"] = Instance.new("TextLabel", KeySystem["ab"])
-					KeySystem["ac"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255)
-					KeySystem["ac"]["TextStrokeColor3"] = Color3.fromRGB(255, 255, 255)
-					KeySystem["ac"]["TextSize"] = 9
-					KeySystem["ac"]["TextColor3"] = ThemeColor.Text
-
-					ThemeInstances["Text"][#ThemeInstances["Text"] + 1] = KeySystem["ac"]
-					KeySystem["ac"]["Size"] = UDim2.new(1, 0, 1, 0)
-					KeySystem["ac"]["Text"] = [[Copy discord invite]]
-					KeySystem["ac"]["Font"] = Enum.Font.GothamMedium
-					KeySystem["ac"]["BackgroundTransparency"] = 1
-
-					-- StarterGui.Vision Lib v2.KeySystemFrame.Main.DiscordServerButton.UIStroke
-					KeySystem["ad"] = Instance.new("UIStroke", KeySystem["ab"])
-					KeySystem["ad"]["Color"] = Color3.fromRGB(89, 102, 243)
-					KeySystem["ad"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border
-
-					-- StarterGui.Vision Lib v2.KeySystemFrame.Main.DiscordServerButton.UIGradient
-					KeySystem["ae"] = Instance.new("UIGradient", KeySystem["ab"])
-					KeySystem["ae"]["Rotation"] = 90
-					KeySystem["ae"]["Color"] = ColorSequence.new({
-						ColorSequenceKeypoint.new(0.000, Color3.fromRGB(89, 102, 243)),
-						ColorSequenceKeypoint.new(0.516, Color3.fromRGB(78, 90, 213)),
-						ColorSequenceKeypoint.new(1.000, Color3.fromRGB(63, 74, 172)),
-					})
-
-					-- StarterGui.Vision Lib v2.KeySystemFrame.Main.DiscordServerButton.UICorner
-					KeySystem["af"] = Instance.new("UICorner", KeySystem["ab"])
-					KeySystem["af"]["CornerRadius"] = UDim.new(0, 4)
-
-					KeySystem["ab"]["BackgroundTransparency"] = 1
-					KeySystem["ac"]["TextTransparency"] = 1
-					KeySystem["ad"]["Transparency"] = 1
-
-					do
-						Library:Tween(KeySystem["ad"], {
-							Length = 0.7,
-							Goal = { Transparency = 0 },
-						})
-
-						Library:Tween(KeySystem["ab"], {
-							Length = 0.7,
-							Goal = { BackgroundTransparency = 0 },
-						})
-
-						Library:Tween(KeySystem["ac"], {
-							Length = 0.7,
-							Goal = { TextTransparency = 0 },
-						})
-					end
-
-					-- Handler
-					do
-						table.insert(
-							KeyConnectionBin,
-							KeySystem["ab"].MouseEnter:Connect(function()
-								Library:Tween(KeySystem["ad"], {
-									Length = 0.2,
-									Goal = { Color = Color3.fromRGB(137, 145, 213) },
-								})
-
-								Library:PlaySound(LibSettings.HoverSound)
-							end)
-						)
-
-						table.insert(
-							KeyConnectionBin,
-							KeySystem["ab"].MouseLeave:Connect(function()
-								Library:Tween(KeySystem["ad"], {
-									Length = 0.2,
-									Goal = { Color = Color3.fromRGB(89, 102, 243) },
-								})
-							end)
-						)
-
-						table.insert(
-							KeyConnectionBin,
-							KeySystem["ab"].MouseButton1Click:Connect(function()
-								Library:PlaySound(LibSettings.ClickSound)
-								task.spawn(function()
-									Library:ForceNotify({
-										Name = "Discord",
-										Text = "Copied the discord link to clipboard!",
-										Icon = "rbxassetid://11401835376",
-										Duration = 3,
-									})
-
-									Library:Tween(KeySystem["ad"], {
-										Length = 0.2,
-										Goal = { Color = Color3.fromRGB(183, 188, 213) },
-									})
-
-									task.wait(0.2)
-
-									Library:Tween(KeySystem["ad"], {
-										Length = 0.2,
-										Goal = { Color = Color3.fromRGB(137, 145, 213) },
-									})
-								end)
-
-								pcall(function()
-									setclipboard(Gui.DiscordLink)
-								end)
-							end)
-						)
-					end
-				end
-
-				repeat
-					task.wait()
-				until KeySystem.CorrectKey
-
-				do
-					do
-						Library:Tween(KeySystem["a4"], {
-							Length = 0.7,
-							Goal = { TextTransparency = 1 },
-						})
-
-						Library:Tween(KeySystem["a9"], {
-							Length = 0.7,
-							Goal = { TextTransparency = 1 },
-						})
-
-						Library:Tween(KeySystem["a6"], {
-							Length = 0.7,
-							Goal = { TextTransparency = 1 },
-						})
-
-						Library:Tween(KeySystem["a8"], {
-							Length = 0.7,
-							Goal = { BackgroundTransparency = 1 },
-						})
-
-						Library:Tween(KeySystem["a4"], {
-							Length = 0.7,
-							Goal = { BackgroundTransparency = 1 },
-						})
-
-						Library:Tween(KeySystem["a0"], {
-							Length = 0.7,
-							Goal = { BackgroundTransparency = 1 },
-						})
-
-						Library:Tween(KeySystem["a2"], {
-							Length = 0.7,
-							Goal = { Transparency = 1 },
-						})
-					end
-
-					if Gui.DiscordLink ~= nil then
-						do
-							Library:Tween(KeySystem["ad"], {
-								Length = 0.7,
-								Goal = { Transparency = 1 },
-							})
-
-							Library:Tween(KeySystem["ab"], {
-								Length = 0.7,
-								Goal = { BackgroundTransparency = 1 },
-							})
-
-							Library:Tween(KeySystem["ac"], {
-								Length = 0.7,
-								Goal = { TextTransparency = 1 },
-							})
-						end
-					end
-				end
-
-				task.wait(1)
-
-				Library:Tween(StartAnimation["96"], {
-					Length = 0.7,
-					Goal = { TextTransparency = 0 },
-				})
-
-				Library:Tween(StartAnimation["95"], {
-					Length = 0.7,
-					Goal = { TextTransparency = 0 },
-				})
-
-				task.spawn(function()
-					task.wait(1)
-					KeySystem["a0"]:Destroy()
-
-					for i, v in next, KeyConnectionBin do
-						v:Disconnect()
-					end
-				end)
-
-				KeyChecked = true
-			else
-				KeyChecked = true
-			end
-
-			repeat
-				task.wait()
-			until KeyChecked
-
-			task.wait(0.3)
-
-			Library:Tween(StartAnimation["92"], {
-				Length = 1,
-				Goal = { Position = UDim2.new(0, 0, 0, 0) },
-			})
-
-			Library:Tween(StartAnimation["92"], {
-				Length = 1,
-				Goal = { Size = UDim2.new(0, 498, 0, 452) },
-			})
-
-			Library:Tween(StartAnimation["9e"], {
-				Length = 0.7,
-				Goal = { TextTransparency = 0 },
-			})
-
-			Library:Tween(StartAnimation["9c"], {
-				Length = 0.7,
-				Goal = { ImageTransparency = 0 },
-			})
-
-			Library:Tween(StartAnimation["9c"], {
-				Length = 0.7,
-				Goal = { BackgroundTransparency = 0 },
-			})
-
-			task.wait(1)
-
-			Gui["2"]["Size"] = UDim2.new(0, 498, 0, 0)
-			Gui["2"]["Visible"] = true
-
-			task.wait(1.8)
-
-			Library:Tween(StartAnimation["96"], {
-				Length = 0.7,
-				Goal = { TextTransparency = 1 },
-			})
-
-			Library:Tween(StartAnimation["95"], {
-				Length = 0.7,
-				Goal = { TextTransparency = 1 },
-			})
-
-			Library:Tween(StartAnimation["9e"], {
-				Length = 0.7,
-				Goal = { TextTransparency = 1 },
-			})
-
-			Library:Tween(StartAnimation["9c"], {
-				Length = 0.7,
-				Goal = { ImageTransparency = 1 },
-			})
-
-			Library:Tween(StartAnimation["9c"], {
-				Length = 0.7,
-				Goal = { BackgroundTransparency = 1 },
-			})
-
-			task.wait(0.1)
-
-			Gui["3"]["Position"] = UDim2.new(0, 0, 0, 300)
-			Gui["2"]["Size"] = UDim2.new(0, 498, 0, 498)
-
-			Library:Tween(Gui["3"], {
-				Length = 1.5,
-				Goal = { Position = UDim2.new(0, 0, 0, 455) },
-			})
-
-			task.wait(2)
-
-			Library:Tween(StartAnimation["92"], {
-				Length = 0.5,
-				Goal = { BackgroundTransparency = 1 },
-			})
-
-			Library.Sliding = false
-			Library.Loaded = true
-
-			task.spawn(function()
-				task.wait(1)
-
-				Library:SetTheme({})
-			end)
-		end)
-	end
 
 	function Gui:Tab(options)
 		options = Library:PlaceDefaults({

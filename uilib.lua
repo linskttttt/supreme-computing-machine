@@ -1254,31 +1254,48 @@ function Library:Create(options)
 			if options.KeySystem then
 				KeySystem = { CorrectKey = false, Attempts = Gui.MaxAttempts }
 
-				-- Hide main avatar & welcome while entering key
+				-- Hide main avatar & welcome
 				StartAnimation["9c"].Visible = false
 				StartAnimation["9e"].Visible = false
 
-				-- KeySystem container (bigger, with padding)
-				local keyContainer = Instance.new("Frame", StartAnimation["92"])
-				keyContainer.Name = "KeySystemContainer"
-				keyContainer.Size = UDim2.new(1, -32, 0, 220)
-				keyContainer.Position = UDim2.new(0, 16, 1, 0) -- start off-screen
-				keyContainer.BackgroundTransparency = 1
+				-- Container for key prompt
+				local container = Instance.new("Frame", StartAnimation["92"])
+				container.Name = "KeySystemContainer"
+				container.AnchorPoint = Vector2.new(0.5, 0.5)
+				container.Position = UDim2.new(0.5, 0, 1.3, 0) -- start off-screen
+				container.Size = UDim2.new(1, -48, 0, 260) -- wider + more padding
+				container.BackgroundColor3 = ThemeColor.Textbox
+				container.BorderSizePixel = 0
+				local contCorner = Instance.new("UICorner", container)
+				contCorner.CornerRadius = UDim.new(0, 8)
 
-				-- Slide in the container
-				Library:Tween(keyContainer, {
+				-- Slide the container into view
+				Library:Tween(container, {
 					Length = 0.6,
 					Direction = Enum.EasingDirection.Out,
-					Goal = { Position = UDim2.new(0, 16, 0.5, -110) },
+					Goal = { Position = UDim2.new(0.5, 0, 0.5, -10) },
 				})
 
-				-- Avatar at the top-center of the key prompt
-				local avatar = Instance.new("ImageLabel", keyContainer)
+				-- Padding + vertical layout
+				local pad = Instance.new("UIPadding", container)
+				pad.PaddingTop = UDim.new(0, 24)
+				pad.PaddingBottom = UDim.new(0, 24)
+				pad.PaddingLeft = UDim.new(0, 24)
+				pad.PaddingRight = UDim.new(0, 24)
+
+				local layout = Instance.new("UIListLayout", container)
+				layout.FillDirection = Enum.FillDirection.Vertical
+				layout.SortOrder = Enum.SortOrder.LayoutOrder
+				layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+				layout.Padding = UDim.new(0, 16)
+
+				-- 1) Avatar at top-center
+				local avatar = Instance.new("ImageLabel", container)
 				avatar.Name = "UserAvatar"
-				avatar.Size = UDim2.new(0, 80, 0, 80)
-				avatar.AnchorPoint = Vector2.new(0.5, 0)
-				avatar.Position = UDim2.new(0.5, 0, 0, 0)
+				avatar.LayoutOrder = 1
+				avatar.Size = UDim2.new(0, 90, 0, 90)
 				avatar.BackgroundTransparency = 1
+				avatar.ImageTransparency = 1
 				avatar.Image = Players:GetUserThumbnailAsync(
 					LocalPlayer.UserId,
 					Enum.ThumbnailType.HeadShot,
@@ -1287,45 +1304,48 @@ function Library:Create(options)
 				local avCorn = Instance.new("UICorner", avatar)
 				avCorn.CornerRadius = UDim.new(1, 0)
 
-				-- Input frame + TextBox
-				local inputFrame = Instance.new("Frame", keyContainer)
+				-- 2) Input frame + TextBox
+				local inputFrame = Instance.new("Frame", container)
 				inputFrame.Name = "InputFrame"
-				inputFrame.Size = UDim2.new(1, 0, 0, 36)
-				inputFrame.Position = UDim2.new(0, 0, 0, 80 + 16)
+				inputFrame.LayoutOrder = 2
+				inputFrame.Size = UDim2.new(1, 0, 0, 44)
 				inputFrame.BackgroundColor3 = ThemeColor.Textbox
 				inputFrame.BorderSizePixel = 0
-				local iCorn = Instance.new("UICorner", inputFrame)
-				iCorn.CornerRadius = UDim.new(0, 6)
+				inputFrame.BackgroundTransparency = 0
+				local ifCorn = Instance.new("UICorner", inputFrame)
+				ifCorn.CornerRadius = UDim.new(0, 6)
 				local stroke = Instance.new("UIStroke", inputFrame)
 				stroke.Color = ThemeColor.MainTrue
 				stroke.Thickness = 2
 
 				local keyBox = Instance.new("TextBox", inputFrame)
 				keyBox.Name = "KeyTextBox"
-				keyBox.Size = UDim2.new(1, -14, 1, -14)
-				keyBox.Position = UDim2.new(0, 7, 0, 7)
+				keyBox.AnchorPoint = Vector2.new(0.5, 0.5)
+				keyBox.Position = UDim2.new(0.5, 0, 0.5, 0)
+				keyBox.Size = UDim2.new(1, -16, 1, -16)
 				keyBox.BackgroundTransparency = 1
 				keyBox.PlaceholderText = "Enter key..."
 				keyBox.PlaceholderColor3 = ThemeColor.PlaceholderText
 				keyBox.Text = ""
 				keyBox.TextColor3 = ThemeColor.Text
 				keyBox.Font = Enum.Font.Gotham
-				keyBox.TextSize = 14
+				keyBox.TextSize = 16
 				keyBox.TextXAlignment = Enum.TextXAlignment.Left
 
-				-- Discord invite button
-				local discordBtn = Instance.new("TextButton", keyContainer)
-				discordBtn.Name = "CopyDiscordButton"
-				discordBtn.Size = UDim2.new(0.6, 0, 0, 36)
-				discordBtn.AnchorPoint = Vector2.new(0.5, 0)
-				discordBtn.Position = UDim2.new(0.5, 0, 0, 80 + 16 + 36 + 16)
+				-- 3) Discord invite button
+				local discordBtn = Instance.new("TextButton", container)
+				discordBtn.Name = "CopyDiscordInvite"
+				discordBtn.LayoutOrder = 3
+				discordBtn.Size = UDim2.new(0.6, 0, 0, 44)
 				discordBtn.BackgroundColor3 = ThemeColor.MainTrue
-				discordBtn.Font = Enum.Font.GothamBold
-				discordBtn.TextSize = 14
 				discordBtn.TextColor3 = Color3.new(1, 1, 1)
+				discordBtn.Font = Enum.Font.GothamBold
+				discordBtn.TextSize = 16
 				discordBtn.Text = "Copy Discord Invite"
-				local bCorn = Instance.new("UICorner", discordBtn)
-				bCorn.CornerRadius = UDim.new(0, 6)
+				local dbCorn = Instance.new("UICorner", discordBtn)
+				dbCorn.CornerRadius = UDim.new(0, 6)
+				discordBtn.AutoButtonColor = false
+				discordBtn.TextTransparency = 1
 
 				discordBtn.MouseEnter:Connect(function()
 					stroke.Color = ThemeColor.SecondaryTrue
@@ -1346,66 +1366,79 @@ function Library:Create(options)
 					})
 				end)
 
-				-- Footer title at bottom-left
-				local footer = Instance.new("TextLabel", keyContainer)
+				-- 4) Footer title at bottom-left
+				local footer = Instance.new("TextLabel", container)
 				footer.Name = "KeySystemFooter"
-				footer.Size = UDim2.new(0, 100, 0, 24)
-				footer.AnchorPoint = Vector2.new(0, 1)
-				footer.Position = UDim2.new(0, 16, 1, -16)
+				footer.LayoutOrder = 4
+				footer.Size = UDim2.new(1, 0, 0, 24)
 				footer.BackgroundTransparency = 1
-				footer.Font = Enum.Font.GothamBold
+				footer.TextXAlignment = Enum.TextXAlignment.Left
+				footer.Text = "Key System"
+				footer.Font = Enum.Font.Gotham
 				footer.TextSize = 14
 				footer.TextColor3 = ThemeColor.Text
-				footer.Text = "Key System"
+				footer.TextTransparency = 1
+
+				-- Fade-in animations
+				local sequence = { avatar, inputFrame, discordBtn, footer }
+				for i, guiObj in ipairs(sequence) do
+					task.delay(0.1 * i, function()
+						if guiObj:IsA("ImageLabel") then
+							Library:Tween(guiObj, { Length = 0.5, Goal = { ImageTransparency = 0 } })
+						elseif guiObj:IsA("Frame") then
+							Library:Tween(guiObj, { Length = 0.5, Goal = { BackgroundTransparency = 0 } })
+						else
+							Library:Tween(guiObj, { Length = 0.5, Goal = { TextTransparency = 0 } })
+						end
+					end)
+				end
 
 				-- Handle key submission
-				keyBox.FocusLost:Connect(function()
-					local entered = keyBox.Text
-					if entered ~= "" then
-						if entered == Gui.Key then
-							KeySystem.CorrectKey = true
-							Library:ForceNotify({
-								Name = "KeySystem",
-								Text = "Correct key!",
-								Icon = "rbxassetid://11401835376",
-								Duration = 3,
-							})
-						else
-							KeySystem.Attempts = KeySystem.Attempts - 1
-							Library:ForceNotify({
-								Name = "KeySystem",
-								Text = "Incorrect! " .. KeySystem.Attempts .. " attempts left",
-								Icon = "rbxassetid://11401835376",
-								Duration = 3,
-							})
-							if KeySystem.Attempts <= 0 then
-								game.Players.LocalPlayer:Kick("Too many failed attempts")
-							end
-						end
-						keyBox.Text = ""
+				keyBox.FocusLost:Connect(function(enterPressed)
+					if not enterPressed or keyBox.Text == "" then
+						return
 					end
+					if keyBox.Text == Gui.Key then
+						KeySystem.CorrectKey = true
+						Library:ForceNotify({
+							Name = "KeySystem",
+							Text = "Correct key!",
+							Icon = "rbxassetid://11401835376",
+							Duration = 3,
+						})
+					else
+						KeySystem.Attempts -= 1
+						Library:ForceNotify({
+							Name = "KeySystem",
+							Text = "Incorrect! " .. KeySystem.Attempts .. " attempts left",
+							Icon = "rbxassetid://11401835376",
+							Duration = 3,
+						})
+						if KeySystem.Attempts <= 0 then
+							game.Players.LocalPlayer:Kick("Too many failed attempts")
+						end
+					end
+					keyBox.Text = ""
 				end)
 
-				-- Wait until the correct key is entered
+				-- Wait for correct key
 				repeat
 					task.wait()
 				until KeySystem.CorrectKey
 
-				-- Slide out & destroy
-				Library:Tween(keyContainer, {
+				-- Slide out & cleanup
+				Library:Tween(container, {
 					Length = 0.4,
 					Direction = Enum.EasingDirection.In,
-					Goal = { Position = UDim2.new(0, 16, 1, 0) },
+					Goal = { Position = UDim2.new(0.5, 0, 1.3, 0) },
 				})
 				task.wait(0.5)
-				keyContainer:Destroy()
+				container:Destroy()
 
 				-- Restore main avatar & welcome
 				StartAnimation["9c"].Visible = true
 				StartAnimation["9e"].Visible = true
 
-				KeyChecked = true
-			else
 				KeyChecked = true
 			end
 
